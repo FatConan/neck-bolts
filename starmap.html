@@ -271,7 +271,7 @@
                 },
 
                 colorWord: function(rating){
-                    var colors = ['#d35454', '#f48d71', '#f9c55d', '#d6cf56', '#60bd88'];
+                    var colors = ['#d35454', '#f48d71', '#f9c55d', '#d6cf56', '#92bc61'];
                     var i = Math.max(Math.min(Math.floor(rating), colors.length - 1), 0);
                     return colors[i];
                 },
@@ -332,7 +332,7 @@
                         .style("stroke", "#dedede")
                         .style("fill-opacity", 1);
                 },
-
+               
                 drawGuideLines: function(){
                     for(var i=0; i < 6; i++){
                         var container = this.svg.append("svg:g");
@@ -391,7 +391,6 @@
                     var draw_rotate = node.rotate;
 
                     var clicked = function(){
-                        console.log(this);
                         d3.selectAll("circle").style("fill", function(circle){ return d3.select(this).attr("data-fill"); });
                         d3.select(this).style("fill", "#000000");
                     }

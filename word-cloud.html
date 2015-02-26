@@ -216,6 +216,7 @@
                 width: 800,
                 arrowWidth: 6,
                 arrowLength: 34,
+                barHeight: 10,
                 canvas: null,
                 svg: null,
                 quadTree: null,
@@ -271,7 +272,6 @@
 
                     this.quadTree = new QuadTree({x:0,y:0,width:canvasWidth,height:canvasHeight});
                     this.spiralGenerator = this.archimedeanSpiral(canvasWidth, canvasHeight);
-                    //this.maxDelta = Math.sqrt(Math.pow(canvasHeight,2) + Math.pow(canvasWidth,2));
                 },
 
                 getSprite: function(node){
@@ -290,7 +290,7 @@
                 },
 
                 colorWord: function(rating){
-                    var colors = ['#d35454', '#f48d71', '#f9c55d', '#d6cf56', '#60bd88'];
+                    var colors = ['#d35454', '#f48d71', '#f9c55d', '#d6cf56', '#92bc61'];
                     var i = Math.max(Math.min(Math.floor(rating), colors.length - 1), 0);
                     return colors[i];
                 },
@@ -419,33 +419,15 @@
                         var y = (this.height/5) * i;
                         this.drawLine(container, [{x: 0, y: y}, {x: this.width, y: y}]);
                     }
+
                     for(var i=0; i < 16; i++){
                         var container = this.svg.append("svg:g");
                         var x = (this.width/15) * i;
                         this.drawLine(container, [{x: x, y: 0}, {x: x, y: this.height}]);
                     }
 
-                    var container = this.svg.append("svg:g");
-                    var texts = [
-                        {text: 'NEGATIVE', anchor: 'start', x:0},
-                        {text: 'NEUTRAL', anchor: 'middle', x:this.width/2},
-                        {text:'POSITIVE', anchor: 'end', x:this.width}
-                    ];
-
-                    for(var i=0; i<texts.length; i++){
-                        var text = texts[i];
-                        var y = -10;
-                        container.append("text")
-                            .text(text.text)
-                            .attr("fill", "#ababab")
-                            .style("font-size", "16px")
-                            .style("font-weight", "300")
-                            .attr("text-anchor", text.anchor)
-                            .attr("transform", "translate(" + text.x + "," + y + ")");
-                    }
-
                     for(var i=0; i<5; i++){
-                        var y = this.height + 25;
+                        var y = -40;
                         var x = ((this.width/5) * i+1) + this.width/10;
                         var text = i+1 + (i+1 > 1 ? " STARS" : " STAR");
 
@@ -458,16 +440,15 @@
                             .attr("transform", "translate(" + x + "," + y + ")");
                     }
 
-                    /*var intensity_y = (this.height/2);
+                    var maxWidth = (this.width/5) * 0.7;
+                    var leftOffset = ((this.width/5) - maxWidth)/2;
 
-                    container.append("text")
-                        .text('INTENSITY')
-                        .attr("fill", "#ababab")
-                        .style("font-size", "16px")
-                        .style("font-weight", "300")
-                        .attr("text-anchor", "middle")
-                        .attr("transform", "translate(" + -10 + "," + intensity_y + "), rotate(-90)");*/
-
+                    var ratings = this.dataProvider["ratings"];
+                    this.drawBar(container, maxWidth, ratings["total"], ratings["1"], this.colorWord(0), leftOffset, -30);
+                    this.drawBar(container, maxWidth, ratings["total"], ratings["2"], this.colorWord(1), (this.width/5) + leftOffset, -30);
+                    this.drawBar(container, maxWidth, ratings["total"], ratings["3"], this.colorWord(2), ((this.width/5)*2) + leftOffset, -30);
+                    this.drawBar(container, maxWidth, ratings["total"], ratings["4"], this.colorWord(3), ((this.width/5)*3) + leftOffset, -30);
+                    this.drawBar(container, maxWidth, ratings["total"], ratings["5"], this.colorWord(4), ((this.width/5)*4) + leftOffset, -30);
                 },
 
                 drawTexts: function(container, nodes){
@@ -478,7 +459,7 @@
 
                 drawText: function(container, node){
                     var draw_x = node.x;
-                    var draw_y = node.y + this.paddingTop;
+                    var draw_y = node.y;
                     var draw_rotate = node.rotate;
 
                     var text = container.append("text")
@@ -489,12 +470,81 @@
                         .attr("text-anchor", "start")
                         .attr("transform", "translate(" + draw_x + "," + draw_y + "), rotate(" + draw_rotate +")");
                 },
+                
+                drawBar: function(container, barWidth, total, count, color, x, y){
+                    var pathLine = [{x: 0, y: 0}, {x: barWidth, y: 0}, {x: barWidth, y: this.barHeight}, {x: 0, y: this.barHeight}, {x: 0, y: 0}];
+                    var container = this.svg.append("svg:g")
+                        .attr("transform", "translate(" + x + "," + y +")");
+
+                    var filledWidth = barWidth * (count/total);
+                    var fillerLine = [{x: 0, y: 0}, {x: filledWidth, y: 0}, {x: filledWidth, y: this.barHeight}, {x: 0, y: this.barHeight}, {x: 0, y: 0}];
+                    var pointerLine = d3.svg.line()
+                        .x(function(d) { return d.x })
+                        .y(function(d) { return d.y });
+
+                    var filledLine = d3.svg.line()
+                        .x(function(d) { return d.x })
+                        .y(function(d) { return d.y });
+
+                        container.selectAll("path.underlay")
+                            .data([pathLine])
+                            .enter()
+                            .append("svg:path")
+                            .attr("class", "underlay")
+                            .attr("d", pointerLine)
+                            .style("fill", "#dedede")
+                            .style("stroke-opacity", 0)
+                            .style("fill-opacity", 1);
+
+                        container.append("svg:circle")
+                            .attr("cx", 0)
+                            .attr("cy", this.barHeight/2)
+                            .attr("r", this.barHeight/2)
+                            .style("fill", "#dedede")
+                            .style("stroke-opacity", 0)
+                            .style("fill-opacity", 1);
+
+                        container.append("svg:circle")
+                            .attr("cx", barWidth)
+                            .attr("cy", this.barHeight/2)
+                            .attr("r", this.barHeight/2)
+                            .style("fill", "#dedede")
+                            .style("stroke-opacity", 0)
+                            .style("fill-opacity", 1);
+
+                        container.selectAll("path.overlay")
+                            .data([fillerLine])
+                            .enter()
+                            .append("svg:path")
+                            .attr("class", "overlay")
+                            .attr("d", filledLine)
+                            .style("fill", color)
+                            .style("stroke-opacity", 0)
+                            .style("fill-opacity", 1);
+                            
+                        container.append("svg:circle")
+                            .attr("cx", 0)
+                            .attr("cy", this.barHeight/2)
+                            .attr("r", this.barHeight/2)
+                            .style("fill", color)
+                            .style("stroke-opacity", 0)
+                            .style("fill-opacity", 1);
+
+                        container.append("svg:circle")
+                            .attr("cx", filledWidth)
+                            .attr("cy", this.barHeight/2)
+                            .attr("r", this.barHeight/2)
+                            .style("fill", color)
+                            .style("stroke-opacity", 0)
+                            .style("fill-opacity", 1);
+                },
 
                 draw: function(words, progressive){
                     this.drawGuideLines();
                     //return;
                     var container = this.svg.append("svg:g").attr("class", "word-cloud");
-                    var nodes = []
+                    var nodes = [];
+
                     this.current = {
                         currentSizeI: -1,
                         currentWeight: -1
@@ -571,7 +621,7 @@
                     this.width = 1600;
                     this.resetCanvas(target);
                     this.quadTree.clear();
-                    this.draw(this.dataProvider, true);
+                    this.draw(this.dataProvider["words"], true);
                     this.addRefresher(target);
                 }
             }
@@ -582,15 +632,15 @@
             var options = {
                 height: 400,
                 width: 900,
-                paddingTop: 40,
-                paddingBottom: 40,
+                paddingTop: 80,
+                paddingBottom: 20,
                 paddingLeft: 30,
                 paddingRight: 30,
                 scale: 1
             }
 
             var chart = create(options);
-            chart.dataProvider = words;
+            chart.dataProvider = {'words':words, 'ratings':{'1': 345, '2':200, '3':100, '4':89, '5':24, 'total': 758}};
             chart.write('#word');
         </script>
     </body>

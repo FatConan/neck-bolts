@@ -42,7 +42,7 @@
                 //Faked to act as it does in Portal
                 var chart = {
                     arcRadius: 100,
-                    arcWidth: 20,
+                    arcWidth: 15,
                     arrowWidth: 6,
                     arrowLength: 34,
                     canvas: null,
@@ -58,6 +58,28 @@
                             .attr("transform", "translate(" + (this.arcRadius+options.padding) + "," + (this.arcRadius+options.padding) + ")");
                     },
 
+                    interpolator: function(startAngle, endAngle){
+                        /*var lower = d3.scale.linear()
+                          .domain([startAngle, endAngle/2])
+                          .interpolate(d3.interpolateRgb)
+                          .range(["#f5b55f", "#93bb66"]);
+                        var upper = d3.scale.linear()
+                          .domain([endAngle/2, endAngle])
+                          .interpolate(d3.interpolateRgb)
+                          .range(["#93bb66", "#64bc8a"]);*/
+                        var _default = d3.scale.linear()
+                          .domain([startAngle, endAngle])
+                          .interpolate(d3.interpolateRgb)
+                          .range(["#f5b55f", "#93bb66"])
+                        return function(angle){
+                            /*if(angle < endAngle){
+                                return lower(angle);
+                            }
+                            return upper(angle);*/
+                            return _default(angle);
+                        }
+                    },
+
                     drawArc: function(radius, startAngle, endAngle, color, width){
                         var arc = d3.svg.arc()
                             .innerRadius(radius - width)
@@ -66,30 +88,36 @@
                             .endAngle(endAngle);
 
                         this.svg.append("path")
+                            .attr("stroke", color)
+                            .attr("stroke-width", 1)
                             .attr("fill", color)
                             .attr("d", arc);
 
                         return arc;
                     },
 
-                    rotateNeedle: function(defaultStartAngle, defaultPoorPerformanceAngle, standard_score, benchmark_score, score){
-                        var degsPerRad = 360/(Math.PI*2);
+                    drawText: function(standard_percentage, benchmark_percentage, game_percentage){
+                        this.svg.append("text")
+                            .text("Standard " + standard_percentage.toFixed(0) + "%")
+                            .attr("fill",  options.standardArcColor)
+                            .style("font-size", "10pt")
+                            .attr("text-anchor", "middle")
+                            .attr("transform", "translate(" + 0 + "," + ((this.arcRadius/2) + 10) + ")");
 
-                        var startAngle = defaultStartAngle * degsPerRad;
-                        var angle = startAngle;
-                        var benchmark_gap = (benchmark_score - standard_score);
-                        var degsPerPoint = 90/benchmark_gap;
+                        this.svg.append("text")
+                            .text("Benchmark " + benchmark_percentage.toFixed(0) + "%")
+                            .attr("fill",  options.benchmarkArcColor)
+                            .style("font-size", "10pt")
+                            .attr("text-anchor", "middle")
+                            .attr("transform", "translate(" + (this.arcRadius * 3) + "," + ((this.arcRadius/2) + 10) + ")");
 
-                        if(score - standard_score < 0){
-                            angle = defaultPoorPerformanceAngle * degsPerRad;
-                        }else if(score - benchmark_score > 0){
-                            angle = startAngle + (degsPerPoint * benchmark_gap);
-                        }else{
-                            angle = startAngle + ((score - standard_score) * degsPerPoint);   
-                        }
-
-                        console.log(benchmark_gap, degsPerPoint, angle);
-                        return angle;
+                        this.svg.append("text")
+                            .text(game_percentage.toFixed(0) + "%")
+                            .attr("fill",  options.actualColor)
+                            .style("font-size", "30pt")
+                            .style("font-weight", "300")
+                            .attr("text-anchor", "middle")
+                            .attr("transform", "translate(" + (this.arcRadius * 3) + "," + 0 + ")");
                     },
 
                     drawNeedle: function(angle){
@@ -122,58 +150,105 @@
                             .style("opacity", 1);
                     },
                     
-                    drawText: function(standard_percentage, benchmark_percentage, game_percentage){
-                        this.svg.append("text")
-                            .text("Standard " + standard_percentage.toFixed(0) + "%")
-                            .attr("fill",  options.standardArcColor)
-                            .style("font-size", "10pt")
-                            .attr("text-anchor", "middle")
-                            .attr("transform", "translate(" + 0 + "," + ((this.arcRadius/2) + 10) + ")");
+                    rotateNeedle: function(arcLimits, standard_score, benchmark_score, score){
+                        var benchmark_gap = (benchmark_score - standard_score);
+                        var effectiveLimits = arcLimits.effectiveLimits();
+                        var degsPerPoint = arcLimits.convertToDegrees(effectiveLimits.end - effectiveLimits.start)/benchmark_gap;
+                        var angle;
 
-                        this.svg.append("text")
-                            .text("Benchmark " + benchmark_percentage.toFixed(0) + "%")
-                            .attr("fill",  options.benchmarkArcColor)
-                            .style("font-size", "10pt")
-                            .attr("text-anchor", "middle")
-                            .attr("transform", "translate(" + (this.arcRadius * 3) + "," + ((this.arcRadius/2) + 10) + ")");
+                        if(score - standard_score < 0){
+                            angle = arcLimits.convertToDegrees(arcLimits.start);
+                        }else if(score - benchmark_score > 0){
+                            angle = arcLimits.convertToDegrees(arcLimits.fullLimits().end);
+                        }else{
+                            angle = arcLimits.convertToDegrees(effectiveLimits.start) + ((score - standard_score) * degsPerPoint);
+                        }
 
-                        this.svg.append("text")
-                            .text(game_percentage.toFixed(0) + "%")
-                            .attr("fill",  options.actualColor)
-                            .style("font-size", "30pt")
-                            .style("font-weight", "300")
-                            .attr("text-anchor", "middle")
-                            .attr("transform", "translate(" + (this.arcRadius * 3) + "," + 0 + ")");
+                        return angle;
                     },
 
+
                     draw: function(standard_score, benchmark_score, game_score){
-                        var radsPerPercent = (Math.PI)/100;
-                        var defaultEndAngle = Math.PI/4;
-                        var defaultStartAngle = -Math.PI/4;
-                        var defaultPoorPerformanceAngle = defaultStartAngle-(5 * radsPerPercent);
-                        //var radsPerPoint = (Math.PI/2)/(benchmark_score - standard_score);
-                        console.log(benchmark_score - standard_score);
+                        var radsPerPercent = (2 * Math.PI)/100;
 
+                        var arcLimits = this.createArcLimits(Math.PI/2, 2.5 * radsPerPercent, 2.5 * radsPerPercent);
+
+                        //Draw "empty" indicator 
+                        var emptyArcLimits = arcLimits.emptyLimits();
+                        this.drawArc(this.arcRadius, emptyArcLimits.start, emptyArcLimits.end, '#D54447', this.arcWidth);
+
+                        var hundredth = arcLimits.effectiveHundredth();
+                        var effectiveLimits = arcLimits.effectiveLimits();
+                        var interpolator = this.interpolator(effectiveLimits.start, effectiveLimits.end);
+
+                        //Draw the gradient filled effective area
+                        var i =0;
+                        while(i < 100){
+                            var limits = arcLimits.effectiveLimitsIncremental(i, i += 2, hundredth);
+                            this.drawArc(this.arcRadius, limits.start, limits.end, interpolator(limits.start), this.arcWidth);
+                        }
                         
-                        //Draw the background arc
-                        this.drawArc(this.arcRadius, defaultPoorPerformanceAngle, defaultStartAngle, '#ff0000', this.arcWidth);
-                        this.drawArc(this.arcRadius, defaultStartAngle, defaultEndAngle, "#00ff00", this.arcWidth)
-                        //this.drawArc(this.arcRadius, defaultStartAngle, defaultEndAngle, options.backgroundColor, this.arcWidth);
+                        //Draw the "full" indicator 
+                        var fullArcLimits = arcLimits.fullLimits();
+                        this.drawArc(this.arcRadius, fullArcLimits.start, fullArcLimits.end, '#3997C7', this.arcWidth);
 
-                        /*if(benchmark_percentage > standard_percentage){
-                            //Draw the benchmark value first
-                            this.drawArc(this.arcRadius, defaultStartAngle, defaultStartAngle + (radsPerPercent * benchmark_percentage.toFixed(0)), options.benchmarkArcColor, this.arcWidth);
-                            //Draw the standard arc second
-                            this.drawArc(this.arcRadius, defaultStartAngle, defaultStartAngle + (radsPerPercent * standard_percentage.toFixed(0)), options.standardArcColor, this.arcWidth);
-                        }else{
-                            //Draw the standard arc second
-                            this.drawArc(this.arcRadius, defaultStartAngle, defaultStartAngle + (radsPerPercent * standard_percentage.toFixed(0)), options.standardArcColor, this.arcWidth);
-                            //Draw the benchmark value first
-                            this.drawArc(this.arcRadius, defaultStartAngle, defaultStartAngle + (radsPerPercent * benchmark_percentage.toFixed(0)), options.benchmarkArcColor, this.arcWidth);
-                        }*/
-
-                        this.drawNeedle(this.rotateNeedle(defaultStartAngle, defaultPoorPerformanceAngle, standard_score, benchmark_score, game_score));
+                        this.drawNeedle(this.rotateNeedle(arcLimits, standard_score, benchmark_score, game_score));
                         this.drawText(standard_score, benchmark_score, game_score);
+                    },
+
+                    createArcLimits: function(effectiveWidth, stopPointWidth, stopPointGapWidth){
+                        var total_width = effectiveWidth + (2 * (stopPointWidth + stopPointGapWidth));
+                        return {
+                            degsPerRad: 360/(Math.PI*2),
+                            start: -total_width/2,
+                            emptyStartOffset: 0,
+                            emptyEndOffset: stopPointWidth,
+                            effectiveRangeStartOffset: stopPointWidth + stopPointGapWidth,
+                            effectiveRangeEndOffset: stopPointWidth + stopPointGapWidth + effectiveWidth,
+                            fullStartOffset: stopPointWidth + effectiveWidth + (2 * stopPointGapWidth),
+                            fullEndOffset: total_width,
+                            
+                            convertToDegrees: function(rads){
+                                return this.degsPerRad * rads;
+                            },
+
+                            emptyLimits: function(){
+                                return {
+                                    start: this.start + this.emptyStartOffset,
+                                    end: this.start + this.emptyEndOffset
+                                }
+                            },
+                            
+                            fullLimits: function(){
+                                return {
+                                    start: this.start + this.fullStartOffset,
+                                    end: this.start + this.fullEndOffset
+                                }
+                            },
+
+                            effectiveHundredth: function(){
+                                return (this.effectiveRangeEndOffset - this.effectiveRangeStartOffset)/100;
+                            },
+
+                            effectiveLimits: function(){
+                                return { 
+                                    start: this.start + this.effectiveRangeStartOffset,
+                                    end: this.start + this.effectiveRangeEndOffset
+                                } 
+                            },
+
+                            effectiveLimitsIncremental: function(i, j, hundredth){
+                                var distance1 = i * hundredth;
+                                var distance2 = j * hundredth;
+                                if(i < 100){
+                                    return { 
+                                        start: this.start + this.effectiveRangeStartOffset + distance1,
+                                        end: this.start + this.effectiveRangeStartOffset + distance2
+                                    }
+                                }
+                                return null;
+                            }
+                        }   
                     },
 
                     react: function(value){
@@ -249,7 +324,7 @@
 
                     var bench = Math.max(a, b);
                     var standard = Math.min(a, b);
-                    var score = Math.random() * bench;
+                    var score = Math.random() * 100;
 
                     chart.dataProvider = [{
                         'benchmark_score': bench,
