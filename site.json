@@ -1,0 +1,54 @@
+{
+    "sites": [
+    {
+        "root": "neck-bolts",
+        "pages": [
+            {
+                "source": "pages/index.md",
+                "target": "output/index.html"
+            },
+            {
+                "source": "pages/experiments/arcs.md",
+                "target": "output/experiments/arcs.html"
+            },
+            {
+                "source": "pages/experiments/dials.md",
+                "target": "output/experiments/dials.html"
+            },
+            {
+                "source": "pages/experiments/percentage-loader.md",
+                "target": "output/experiments/percentage-loader.html"
+            },
+            {
+                "source": "pages/experiments/slide-out-link.md",
+                "target": "output/experiments/slide-out-link.html"
+            },
+            {
+                "source": "pages/experiments/starmap.md",
+                "target": "output/experiments/starmap.html"
+            },
+            {
+                "source": "pages/experiments/word-cloud.md",
+                "target": "output/experiments/word-cloud.html"
+            }
+        ],
+        "templates": [
+            "templates"
+        ],
+        "resources": [
+            {
+                "source": "resources/css/reset.css",
+                "target": "output/resources/css/reset.css"
+            },
+            {
+                "source": "resources/css/base.css",
+                "target": "output/resources/css/base.css"
+            },
+            {
+                "source": "resources/scripts",
+                "target": "output/resources/scripts",
+                "resource_type": "relocate"
+            }
+        ]
+    }
+]}

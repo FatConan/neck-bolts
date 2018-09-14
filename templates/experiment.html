@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body %}
+    <section class="demo">
+        {% block demo %}{% endblock %}
+    </section>
+    <section class="description">
+        {{ content|safe }}
+    </section>
+    <a href="/">Back</a>
+{% endblock %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Neck-Bolts</title>
+        <link rel="shortcut icon" type="image/" href="/resources/img/favicon.png" />
+        <link rel="stylesheet" href="/resources/css/reset.css" />
+        <link rel="stylesheet" href="/resources/css/base.css" />
+        {% block head %}
+            <script type="text/javascript" data-main="/resources/scripts/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            <h1>{{ title|safe }}</h1>
+        </header>
+        <section class="demonstrations">
+            {% block body %}{{ content|safe }}{% endblock %}
+        </section>
+        <footer></footer>
+    </body>
+</html>

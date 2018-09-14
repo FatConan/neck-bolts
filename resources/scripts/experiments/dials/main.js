@@ -1,45 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <script type="text/javascript" src="d3/d3.v3.js"></script>
-        <style type="text/css">
-            body {
-                font-family: Arial, sans-serif;
-            }
-            div.canvas svg{
-                background: #fff;
-            }
-
-            div.update {
-                margin: 0 0 20px;
-            }
-
-            div.canvas {
-                border: 1px solid #dddddd;
-                float: left;
-                margin: 0 20px 0 0;
-            }
-
-            text {
-                text-align: left;
-                font-size: 30pt;
-                line-height: 30pt;
-                display: block;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="canvas" id="a"></div>
-        <div class="canvas" id="b"></div>
-        <div class="canvas" id="c"></div>
-        <div class="canvas" id="d"></div>
-        <div class="canvas" id="e"></div>
-        <div class="canvas" id="f"></div>
-
-        <script type="text/javascript">
+requirejs(["../../build"], function(){
+    'use strict';
+    requirejs(["jquery", "domReady", "d3"], function ($, domReady, d3) {
+        domReady(function(){
             function create(options){
-                //Faked to act as it does in Portal
                 var chart = {
                     arcRadius: 100,
                     arcWidth: 20,
@@ -59,7 +22,7 @@
                     },
 
                     drawArc: function(radius, startAngle, endAngle, color, width){
-                        var arc = d3.svg.arc()
+                        var arc = d3.arc()
                             .innerRadius(radius - width)
                             .outerRadius(radius)
                             .startAngle(startAngle)
@@ -82,7 +45,7 @@
                         var needleLength = this.arrowLength - (this.arrowWidth/2);
                         var pathLine = [{x: 0, y: -needleLength}, {x: -needleWidth, y: 0}, {x: 0, y: 0}, {x: needleWidth, y: 0}, {x: 0, y: -needleLength}]
                         var container = this.svg.append("svg:g").attr("class", "pointerContainer");
-                        var pointerLine = d3.svg.line()
+                        var pointerLine = d3.line()
                             .x(function(d) { return d.x })
                             .y(function(d) { return d.y });
 
@@ -106,7 +69,7 @@
                             .style("stroke", "#000")
                             .style("opacity", 1);
                     },
-                    
+
                     drawText: function(standard_percentage, benchmark_percentage, game_percentage){
                         this.svg.append("text")
                             .text("Standard " + standard_percentage.toFixed(0) + "%")
@@ -136,7 +99,7 @@
                         var defaultStartAngle = 1.5 * Math.PI;
                         var defaultEndAngle = 2.5 * Math.PI;
 
-                        
+
                         //Draw the background arc
                         this.drawArc(this.arcRadius, defaultStartAngle, defaultEndAngle, options.backgroundColor, this.arcWidth);
 
@@ -180,7 +143,7 @@
                             console.log(e);
                         }
                     }
-                }
+                };
 
                 return chart;
             }
@@ -195,9 +158,7 @@
                 benchmarkArcColor: "#3396c9",
                 actualColor: '#000000',
                 padding: 10
-            }
-
-            
+            };
 
             var els = ['#a', '#b', '#c', '#d', '#e', '#f'];
             var charts = [];
@@ -217,7 +178,7 @@
                 var count = 0;
                 for(var i=0; i < els.length; i++){
                     var chart = charts[i];
-                    if(chart.dataProvider[0]['actual_score'].toFixed(0) != "100"){
+                    if(chart.dataProvider[0]['actual_score'].toFixed(0) !== "100"){
                         chart.dataProvider = [{
                             'benchmark_score': Math.random() * 100,
                             'standard_score': Math.random() * 100,
@@ -228,12 +189,12 @@
                         count++;
                     }
                 }
-                if(count != els.length){
+                if(count !== els.length){
                     setTimeout(reload, 50);
                 }
-            }
+            };
 
             setTimeout(reload, 50);
-        </script>
-    </body>
-</html>
+        });
+    });
+});

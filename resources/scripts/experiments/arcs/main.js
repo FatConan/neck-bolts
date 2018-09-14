@@ -1,45 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <script type="text/javascript" src="d3/d3.v3.js"></script>
-        <style type="text/css">
-            body {
-                font-family: Arial, sans-serif;
-            }
-            div.canvas svg{
-                background: #fff;
-            }
-
-            div.update {
-                margin: 0 0 20px;
-            }
-
-            div.canvas {
-                border: 1px solid #dddddd;
-                float: left;
-                margin: 0 20px 0 0;
-            }
-
-            text {
-                text-align: left;
-                font-size: 30pt;
-                line-height: 30pt;
-                display: block;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="canvas" id="a"></div>
-        <div class="canvas" id="b"></div>
-        <div class="canvas" id="c"></div>
-        <div class="canvas" id="d"></div>
-        <div class="canvas" id="e"></div>
-        <div class="canvas" id="f"></div>
-
-        <script type="text/javascript">
+requirejs(["../../build"], function(){
+    'use strict';
+    requirejs(["jquery", "domReady", "d3"], function ($, domReady, d3) {
+        domReady(function(){
             function create(options){
-                //Faked to act as it does in Portal
                 var chart = {
                     arcRadius: 100,
                     arcWidth: 15,
@@ -59,29 +22,17 @@
                     },
 
                     interpolator: function(startAngle, endAngle){
-                        /*var lower = d3.scale.linear()
-                          .domain([startAngle, endAngle/2])
-                          .interpolate(d3.interpolateRgb)
-                          .range(["#f5b55f", "#93bb66"]);
-                        var upper = d3.scale.linear()
-                          .domain([endAngle/2, endAngle])
-                          .interpolate(d3.interpolateRgb)
-                          .range(["#93bb66", "#64bc8a"]);*/
-                        var _default = d3.scale.linear()
+                        var _default = d3.scaleLinear()
                           .domain([startAngle, endAngle])
                           .interpolate(d3.interpolateRgb)
-                          .range(["#f5b55f", "#93bb66"])
+                          .range(["#f5b55f", "#93bb66"]);
                         return function(angle){
-                            /*if(angle < endAngle){
-                                return lower(angle);
-                            }
-                            return upper(angle);*/
-                            return _default(angle);
+                           return _default(angle);
                         }
                     },
 
                     drawArc: function(radius, startAngle, endAngle, color, width){
-                        var arc = d3.svg.arc()
+                        var arc = d3.arc()
                             .innerRadius(radius - width)
                             .outerRadius(radius)
                             .startAngle(startAngle)
@@ -125,7 +76,7 @@
                         var needleLength = this.arrowLength - (this.arrowWidth/2);
                         var pathLine = [{x: 0, y: -needleLength}, {x: -needleWidth, y: 0}, {x: 0, y: 0}, {x: needleWidth, y: 0}, {x: 0, y: -needleLength}]
                         var container = this.svg.append("svg:g").attr("class", "pointerContainer");
-                        var pointerLine = d3.svg.line()
+                        var pointerLine = d3.line()
                             .x(function(d) { return d.x })
                             .y(function(d) { return d.y });
 
@@ -149,7 +100,7 @@
                             .style("stroke", "#000")
                             .style("opacity", 1);
                     },
-                    
+
                     rotateNeedle: function(arcLimits, standard_score, benchmark_score, score){
                         var benchmark_gap = (benchmark_score - standard_score);
                         var effectiveLimits = arcLimits.effectiveLimits();
@@ -167,13 +118,12 @@
                         return angle;
                     },
 
-
                     draw: function(standard_score, benchmark_score, game_score){
                         var radsPerPercent = (2 * Math.PI)/100;
 
                         var arcLimits = this.createArcLimits(Math.PI/2, 2.5 * radsPerPercent, 2.5 * radsPerPercent);
 
-                        //Draw "empty" indicator 
+                        //Draw "empty" indicator
                         var emptyArcLimits = arcLimits.emptyLimits();
                         this.drawArc(this.arcRadius, emptyArcLimits.start, emptyArcLimits.end, '#D54447', this.arcWidth);
 
@@ -187,8 +137,8 @@
                             var limits = arcLimits.effectiveLimitsIncremental(i, i += 2, hundredth);
                             this.drawArc(this.arcRadius, limits.start, limits.end, interpolator(limits.start), this.arcWidth);
                         }
-                        
-                        //Draw the "full" indicator 
+
+                        //Draw the "full" indicator
                         var fullArcLimits = arcLimits.fullLimits();
                         this.drawArc(this.arcRadius, fullArcLimits.start, fullArcLimits.end, '#3997C7', this.arcWidth);
 
@@ -207,7 +157,7 @@
                             effectiveRangeEndOffset: stopPointWidth + stopPointGapWidth + effectiveWidth,
                             fullStartOffset: stopPointWidth + effectiveWidth + (2 * stopPointGapWidth),
                             fullEndOffset: total_width,
-                            
+
                             convertToDegrees: function(rads){
                                 return this.degsPerRad * rads;
                             },
@@ -218,7 +168,7 @@
                                     end: this.start + this.emptyEndOffset
                                 }
                             },
-                            
+
                             fullLimits: function(){
                                 return {
                                     start: this.start + this.fullStartOffset,
@@ -231,24 +181,24 @@
                             },
 
                             effectiveLimits: function(){
-                                return { 
+                                return {
                                     start: this.start + this.effectiveRangeStartOffset,
                                     end: this.start + this.effectiveRangeEndOffset
-                                } 
+                                }
                             },
 
                             effectiveLimitsIncremental: function(i, j, hundredth){
                                 var distance1 = i * hundredth;
                                 var distance2 = j * hundredth;
                                 if(i < 100){
-                                    return { 
+                                    return {
                                         start: this.start + this.effectiveRangeStartOffset + distance1,
                                         end: this.start + this.effectiveRangeStartOffset + distance2
                                     }
                                 }
                                 return null;
                             }
-                        }   
+                        }
                     },
 
                     react: function(value){
@@ -275,7 +225,7 @@
                             console.log(e);
                         }
                     }
-                }
+                };
 
                 return chart;
             }
@@ -290,14 +240,13 @@
                 benchmarkArcColor: "#3396c9",
                 actualColor: '#000000',
                 padding: 10
-            }
-
-            
+            };
 
             var els = ['#a', '#b', '#c', '#d', '#e', '#f'];
             var charts = [];
 
             for(var i=0; i < els.length; i++){
+                console.log("Creating for " + els[i]);
                 var chart = create(options);
                 var a = Math.random() * 100;
                 var b = Math.random() * 100;
@@ -331,15 +280,15 @@
                         'standard_score': standard,
                         'actual_score': score
                     }];
-                    
+
                     chart.write(els[i]);
                 }
-                if(count != els.length){
+                if(count !== els.length){
                     setTimeout(reload, 50);
                 }
-            }
+            };
 
             setTimeout(reload, 50);
-        </script>
-    </body>
-</html>
+        });
+    });
+});

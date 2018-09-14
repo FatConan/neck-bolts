@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow');
+
+body {
+    font-family: 'PT Sans Narrow', sans-serif;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100px auto;
+    grid-gap: 15px;
+    width: 100%;
+    font-size: 20pt;
+}
+
+header {
+    grid-column: 1;
+    grid-row: 1;
+    background: #efefef;
+}
+
+header h1 {
+    display: block;
+    font-size: 50pt;
+    line-height: 100px;
+    height: 100px;
+    padding-left: 15px;
+    box-sizing: border-box;
+}
+
+.demonstrations {
+    padding: 15px;
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    grid-template-rows: auto;
+    grid-gap: 15px;
+}
+
+.demo {
+    padding: 15px;
+    grid-column: 1;
+    grid-row: 1;
+    background: #efefef;
+    box-sizing: border-box;
+}
+
+.description {
+    grid-column: 2;
+    grid-row: 1;
+    background: #555;
+    box-sizing: border-box;
+}

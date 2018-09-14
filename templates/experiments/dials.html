@@ -1,0 +1,37 @@
+{% extends "experiment.html" %}
+{% block head %}
+        <script type="text/javascript" data-main="/resources/scripts/experiments/dials/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+        <style type="text/css">
+            body {
+                font-family: Arial, sans-serif;
+            }
+            div.canvas svg{
+                background: #fff;
+            }
+
+            div.update {
+                margin: 0 0 20px;
+            }
+
+            div.canvas {
+                border: 1px solid #dddddd;
+                float: left;
+                margin: 0 20px 0 0;
+            }
+
+            text {
+                text-align: left;
+                font-size: 30pt;
+                line-height: 30pt;
+                display: block;
+            }
+        </style>
+{% endblock %}
+{% block demo %}
+    <div class="canvas" id="a"></div>
+    <div class="canvas" id="b"></div>
+    <div class="canvas" id="c"></div>
+    <div class="canvas" id="d"></div>
+    <div class="canvas" id="e"></div>
+    <div class="canvas" id="f"></div>
+{% endblock %}
