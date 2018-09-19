@@ -73,14 +73,26 @@ requirejs(["../../build"], function(){
                 }
             }).create();
 
-            var rand = Math.random() * 100;
-            var radius = 100;
-            progressIndicator.render("div.canvas", rand, radius.toFixed(0));
+            var progressLoader = function(){
+                console.log("Loader");
+                var tick = function(i){
+                    progressIndicator.render("div.canvas", i, 150);
+                };
+                var i = 0;
+                var wrapped = function(){
+                    tick(i);
+                    i += 1;
+                    if(i <= 100){
+                        setTimeout(wrapped, 50);
+                    }else{
+                        i = 0;
+                        setTimeout(progressLoader, 5000);
+                    }
+                };
+                wrapped();
+            };
 
-            d3.select("#test").on('click', function () {
-                var rand = Math.random() * 100;
-                progressIndicator.render("div.canvas", rand, radius.toFixed(0));
-            });
+            progressLoader();
         });
     });
 });
