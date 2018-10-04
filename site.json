@@ -30,6 +30,10 @@
             {
                 "source": "pages/experiments/word-cloud.md",
                 "target": "output/experiments/word-cloud.html"
+            },
+            {
+                "source": "pages/experiments/layout.md",
+                "target": "output/experiments/layout.html"
             }
         ],
         "templates": [
@@ -47,6 +51,11 @@
             {
                 "source": "resources/scripts",
                 "target": "output/resources/scripts",
+                "resource_type": "relocate"
+            },
+            {
+                "source": "resources/img",
+                "target": "output/resources/img",
                 "resource_type": "relocate"
             }
         ]

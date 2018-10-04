@@ -1,0 +1,120 @@
+{% extends "experiment.html" %}
+{% block head %}
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/overcast/jquery-ui.css" />
+        <script type="text/javascript" data-main="/resources/scripts/experiments/layout/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+        <style type="text/css">
+            #layout{
+                display: grid;
+                width: 100%;
+                max-width: 1024px;
+                grid-template-columns: auto auto;
+                grid-gap: 10px;
+                box-sizing: border-box;
+            }
+            fieldset.group{
+                background-color: #faf9f8;
+                width: auto;
+                border: 1px solid #000;
+                box-sizing: border-box;
+            }
+            fieldset.group legend{
+                margin-left: 32px;
+            }
+
+            div.icons{
+                padding: 10px;
+                display: grid;
+                grid-gap: 10px;
+                grid-template-columns: auto;
+                box-sizing: border-box;
+            }
+
+            span.action{
+                cursor: pointer;
+                display: inline-block;
+                padding: 2px;
+            }
+
+            span.action:hover{
+                background: palegoldenrod;
+            }
+
+            div.icons a{
+                background-color: #faf9f8;
+                display: grid;
+                height: 100px;
+                width: 100px;
+                font-size: 11pt;
+                text-decoration: none;
+                overflow: hidden;
+                box-sizing: border-box;
+                text-align: center;
+                grid-template-columns: 100px;
+                grid-template-rows: 64px 36px;
+            }
+
+            div.icons a span.icon {
+                grid-column: 1;
+                grid-row: 1;
+                display: block;
+                height: 64px;
+                width: 100px;
+                text-align: right;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+
+            div.icons a span.title {
+                grid-column: 1;
+                grid-row: 2;
+                padding: 5px;
+                display: block;
+                height: 36px;
+                width: 100px;
+                box-sizing: border-box;
+                line-height: 36px;
+            }
+
+            div.icons a:hover{
+                background-color: #fff;
+                box-shadow: 0 10px 10px #e1e0df;
+            }
+
+            div.icons a.add-icon span.icon{
+                background-image: url(/resources/img/add.svg);
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: 30px 30px;
+            }
+
+            #controls a.add-group::before{
+                content: " + ";
+                font-size: 18pt;
+            }
+            .modal {
+                display: none;
+            }
+        </style>
+{% endblock %}
+{% block demo %}
+    <div id="layout" class="layout">
+
+    </div>
+    <div id="controls" class="controls">
+        <a href="#" class="add-group">Add group</a>
+    </div>
+
+    <section class="modal" id="edit-group">
+        <form autocomplete="off">
+            <label for="group-title">Title:</label>
+            <input id="group-title" name="title" type="text" />
+        </form>
+    </section>
+
+    <section class="modal" id="edit-link">
+        <form autocomplete="off">
+            <label for="link-title">Title:</label>
+            <input id="link-title" name="title" type="text" />
+        </form>
+    </section>
+{% endblock %}
