@@ -34,6 +34,10 @@
             {
                 "source": "pages/experiments/layout.md",
                 "target": "output/experiments/layout.html"
+            },
+            {
+                "source": "pages/experiments/alerts.md",
+                "target": "output/experiments/alerts.html"
             }
         ],
         "templates": [

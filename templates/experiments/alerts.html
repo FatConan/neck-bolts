@@ -1,0 +1,86 @@
+{% extends "experiment.html" %}
+{% block head %}
+        <style type="text/css">
+            div.alert{
+                border: 1px solid #dedede;
+                background-color: #faf9f8;
+                padding: 10px;
+                margin: 10px;
+                position: relative;
+                min-height: 200px;
+            }
+            div.content{
+                margin-left: 150px;
+            }
+            .content h2 {
+                font-weight: bold;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid;
+            }
+
+            .notice .content h2{
+                color: red;
+            }
+
+            div.banner{
+                background-color: #fff;
+                border-left: 50px transparent solid;
+                border-right: 50px transparent solid;
+                border-bottom: 30px solid #faf9f8;
+                box-sizing: border-box;
+                width: 100px;
+                height: 150px;
+                position: absolute;
+                top: 0;
+                left: 20px;
+            }
+
+            div.news div.banner{
+                background-image: url(/resources/img/news-paper.jpg);
+                background-position: top left -70px;
+                background-repeat: no-repeat;
+                background-size: 160px 160px;
+            }
+            div.announcement div.banner{
+                background-image: url(/resources/img/test-card.jpg);
+                background-position: top left -70px;
+                background-repeat: no-repeat;
+                background-size: 160px 160px;
+            }
+            div.notice div.banner{
+                background-image: url(/resources/img/keep-calm.jpg);
+                background-position: top left -70px;
+                background-repeat: no-repeat;
+                background-size: 160px 160px;
+            }
+
+        </style>
+{% endblock %}
+{% block demo %}
+    <div class="alert news">
+        <div class="banner"></div>
+        <div class="content">
+            <h2>News Flash</h2>
+            <p>This is a news thing.</p>
+        </div>
+    </div>
+
+    <div class="alert announcement">
+        <div class="banner"></div>
+        <div class="content">
+            <h2>Announcement</h2>
+            <p>This is a news thing.</p>
+        </div>
+    </div>
+
+    <div class="alert notice">
+        <div class="banner"></div>
+        <div class="content">
+            <h2>Notice</h2>
+            <p>This is a news thing.</p>
+        </div>
+    </div>
+
+<a href="https://www.flickr.com/photos/oswaldo/414772840">Ovnis</a> by <a href="https://www.flickr.com/photos/oswaldo/">oswaldo</a> is licensed under <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>
+{% endblock %}
