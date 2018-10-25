@@ -38,6 +38,10 @@
             {
                 "source": "pages/experiments/alerts.md",
                 "target": "output/experiments/alerts.html"
+            },
+            {
+                "source": "pages/experiments/time-picker.md",
+                "target": "output/experiments/time-picker.html"
             }
         ],
         "templates": [
