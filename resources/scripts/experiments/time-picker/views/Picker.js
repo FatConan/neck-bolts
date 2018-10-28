@@ -17,7 +17,11 @@ define(["jquery", "underscore", "common/BaseClass",
                 var done = false;
                 _.each(this.target[0].children, function(d){
                     if(!done){
-                        if(d === start || d === end){
+                        if(d === start && d === end){
+                            $(d).addClass(className);
+                            done = true;
+                            started = true;
+                        }else if(d === start || d === end){
                             $(d).addClass(className);
                             if(started){
                                done = true;
@@ -32,7 +36,9 @@ define(["jquery", "underscore", "common/BaseClass",
             },
 
             addListeners: function(){
-                this.target.on("mousedown", function (e) {
+                this.target.on("mousedown", function(e){
+                    console.log("mousedown");
+                    console.log(e.target);
                     var el = e.target;
                     while (el && el.matches && !el.matches("div.division")) {
                         el = el.parentNode;
@@ -55,7 +61,9 @@ define(["jquery", "underscore", "common/BaseClass",
                     }
                 }.bind(this));
 
-                this.target.on("mouseup", function (e) {
+                this.target.on("mouseup", function(e){
+                    console.log("mouseup");
+                    console.log(e.target);
                     if(this.selecting){
                         var el = e.target;
                         while (el && el.matches && !el.matches("div.division")) {
