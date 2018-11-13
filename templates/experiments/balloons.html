@@ -7,6 +7,7 @@
 
             div.celebration-shim {
                 background: rgba(0,0,0,0.95);
+                display: none;
                 position: absolute;
                 z-index: 10;
                 width: 100vw;
@@ -16,6 +17,10 @@
                 overflow: hidden;
                 opacity: 0;
                 transition: opacity 1s;
+            }
+
+            div.celebration-shim.prep{
+                display: block;
             }
 
             div.celebration-shim.show{
@@ -28,19 +33,20 @@
                 background-size: 100% auto;
                 background-position: top left;
                 background-repeat: no-repeat;
-                top: 110%;
+                top: 100%;
             }
 
-            div.balloon.move{
-                top: -100%;
-            }
+            /*div.balloon.move{
+                top: 0;
+            }*/
 
             div.celebration-message{
                 font-family: 'Bangers', cursive;
                 font-size: 100pt;
                 position: relative;
                 top: 50px;
-                color: #fff;
+                color: goldenrod;
+                text-shadow: 5px 5px #fff;
                 text-align: center;
                 z-index: 110;
             }

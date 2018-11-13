@@ -4,16 +4,16 @@ define(["jquery", "underscore", "common/BaseClass",
         return BaseClass.extend({
             init: function(){
                 this.balloonImg = "/resources/img/balloon.svg";
-                this.balloonCount = 5;
+                this.balloonCount = 1;
                 this.completedCount = 0;
                 this.celebrationTimeout = null;
                 this.balloonTimeouts = [];
                 this.animationTimeouts = [];
 
                 this.displayCelebrationIndex = 0;
-                this.displayCelebration = [{type: "BIRTHDAY", targets:["Ian", "Bob", "Jane"]}];
+                this.displayCelebrations = [{type: "BIRTHDAY", targets:["Ian", "Bob", "Jane"]}];
 
-                this.shim = $('<div class="celebration-shim" style="display: none"></div>');
+                this.shim = $('<div class="celebration-shim"></div>');
                 $("html").append(this.shim);
 
                 this.addListeners();
@@ -25,48 +25,59 @@ define(["jquery", "underscore", "common/BaseClass",
                 }.bind(this));
 
                 this.shim.on("transitionend", function(e) {
-                    if (e.target.matches("div.celebratory-shim")){
+                    console.log("Shim transition complete");
+                    if(e.target.matches("div.celebratory-shim")){
+                        console.log(e.target);
                         if (this.shim.hasClass("show")){
-                            this.shim.empty();
-                            clearTimeout(this.celebrationTimeout);
-                            _.each(this.balloonTimeouts, function (balloonTimeoutId) {
-                                clearTimeout(balloonTimeoutId);
-                            });
-                            _.each(this.animationTimeouts, function (animationTimeoutId) {
-                                clearTimeout(animationTimeoutId);
-                            });
-                        } else {
-                            this.shim.css("display", "none");
-                            this.shim.empty();
-                            clearTimeout(this.celebrationTimeout);
-                            _.each(this.balloonTimeouts, function (balloonTimeoutId) {
-                                clearTimeout(balloonTimeoutId);
-                            });
-                            _.each(this.animationTimeouts, function (animationTimeoutId) {
-                                clearTimeout(animationTimeoutId);
-                            });
+                            console.log("Shim show");
+                            this.clearTimeouts();
+                        }else{
+                            console.log("Shim hide");
+                            this.shim.removeClass("prep");
+                            this.clearTimeouts();
                         }
                     }
                 }.bind(this));
 
                 this.celebrationTimeout = setTimeout(function(){
-                    this.celebrate(this.displayCelebration);
+                    this.celebrate(this.nextCelebration());
                 }.bind(this), 0);
             },
 
-            closeShim: function(postCloseFunction){
-               this.shim.removeClass("show");
-               
+            nextCelebration: function(){
+               var celebration = this.displayCelebrations[this.displayCelebrationIndex];
+               this.displayCelebrationIndex += 1;
+               this.displayCelebrationIndex = this.displayCelebrationIndex % this.displayCelebrations.length;
+               return celebration;
             },
 
-            showShim: function(postShowFunction){
-                this.shim.css("display", "block");
+            clearTimeouts: function(){
+                clearTimeout(this.celebrationTimeout);
+                _.each(this.balloonTimeouts, function(balloonTimeoutId){
+                    clearTimeout(balloonTimeoutId);
+                });
+                _.each(this.animationTimeouts, function(animationTimeoutId){
+                    clearTimeout(animationTimeoutId);
+                });
+            },
+
+            resetShim: function(){
+                this.shim.empty();
+            },
+
+            closeShim: function(){
+               this.shim.removeClass("show");
+            },
+
+            showShim: function(){
+                this.shim.addClass("prep");
                 this.shim.addClass("show");
             },
 
             floatBalloon: function(balloon){
                 return function(){
-                    balloon.addClass("move");
+                    //balloon.addClass("move");
+                    balloon.css("top", (-1 * balloon.height()) + "px");
                 }
             },
 
@@ -82,7 +93,7 @@ define(["jquery", "underscore", "common/BaseClass",
                         if(this.completedCount === this.balloonCount){
                             this.closeShim();
                             this.celebrationTimeout = setTimeout(function(){
-                                this.celebrate(this.displayCelebration);
+                                this.celebrate(this.nextCelebration());
                             }.bind(this), 30000);
                         }
                     }.bind(this));
@@ -102,6 +113,7 @@ define(["jquery", "underscore", "common/BaseClass",
             },
 
             celebrate: function(celebration){
+                this.resetShim();
                 this.completedCount = 0;
                 var message = $('<div class="celebration-message"></div>');
                 var msg = "";
@@ -132,7 +144,7 @@ define(["jquery", "underscore", "common/BaseClass",
                     var speed = Math.floor((Math.random() * 50) + 10);
                     var scaleFactor = Math.random();
 
-                    var t = setTimeout(this.createBalloon(randId, left, hue, speed, scaleFactor), delay);
+                    var t = setTimeout(this.createBalloon(randId, left, hue, speed, scaleFactor), 0);
                     this.balloonTimeouts.push(t);
                 }
             }
