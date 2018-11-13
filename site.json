@@ -5,35 +5,39 @@
         "pages": [
             {
                 "source": "pages/index.md",
-                "target": "output/index.html"
+                "target": "index.html"
             },
             {
                 "source": "pages/experiments/arcs.md",
-                "target": "output/experiments/arcs.html"
+                "target": "experiments/arcs.html"
             },
             {
                 "source": "pages/experiments/dials.md",
-                "target": "output/experiments/dials.html"
+                "target": "experiments/dials.html"
             },
             {
                 "source": "pages/experiments/percentage-loader.md",
-                "target": "output/experiments/percentage-loader.html"
+                "target": "experiments/percentage-loader.html"
             },
             {
                 "source": "pages/experiments/slide-out-link.md",
-                "target": "output/experiments/slide-out-link.html"
+                "target": "experiments/slide-out-link.html"
             },
             {
                 "source": "pages/experiments/starmap.md",
-                "target": "output/experiments/starmap.html"
+                "target": "experiments/starmap.html"
             },
             {
                 "source": "pages/experiments/word-cloud.md",
-                "target": "output/experiments/word-cloud.html"
+                "target": "experiments/word-cloud.html"
             },
             {
                 "source": "pages/experiments/layout.md",
-                "target": "output/experiments/layout.html"
+                "target": "experiments/layout.html"
+            },
+            {
+                "source": "pages/experiments/balloons.md",
+                "target": "experiments/balloons.html"
             }
         ],
         "templates": [
@@ -42,20 +46,20 @@
         "resources": [
             {
                 "source": "resources/css/reset.css",
-                "target": "output/resources/css/reset.css"
+                "target": "resources/css/reset.css"
             },
             {
                 "source": "resources/css/base.css",
-                "target": "output/resources/css/base.css"
+                "target": "resources/css/base.css"
             },
             {
                 "source": "resources/scripts",
-                "target": "output/resources/scripts",
+                "target": "resources/scripts",
                 "resource_type": "relocate"
             },
             {
                 "source": "resources/img",
-                "target": "output/resources/img",
+                "target": "resources/img",
                 "resource_type": "relocate"
             }
         ]

@@ -1,0 +1,51 @@
+{% extends "experiment.html" %}
+{% block head %}
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/overcast/jquery-ui.css" />
+        <script type="text/javascript" data-main="/resources/scripts/experiments/balloons/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+        <style type="text/css">
+            @import url('https://fonts.googleapis.com/css?family=Bangers');
+
+            div.celebration-shim {
+                background: rgba(0,0,0,0.95);
+                position: absolute;
+                z-index: 10;
+                width: 100vw;
+                height: 100vh;
+                top: 0;
+                left: 0;
+                overflow: hidden;
+                opacity: 0;
+                transition: opacity 1s;
+            }
+
+            div.celebration-shim.show{
+                opacity: 1;
+            }
+
+            div.balloon {
+                position: absolute;
+                z-index: 20;
+                background-size: 100% auto;
+                background-position: top left;
+                background-repeat: no-repeat;
+                top: 110%;
+            }
+
+            div.balloon.move{
+                top: -100%;
+            }
+
+            div.celebration-message{
+                font-family: 'Bangers', cursive;
+                font-size: 100pt;
+                position: relative;
+                top: 50px;
+                color: #fff;
+                text-align: center;
+                z-index: 110;
+            }
+        </style>
+{% endblock %}
+{% block demo %}
+    <div></div>
+{% endblock %}

@@ -10,5 +10,6 @@ homepage: true
 * [Starmap](/experiments/starmap.html) &mdash; Starmap
 * [Word Cloud](/experiments/word-cloud.html) &mdash; Word Cloud
 * [Layout](/experiments/layout.html) &mdash; Layout For Icons and Groups
+* [Balloons](/experiments/balloons.html) &mdash; Balloons
 
 
