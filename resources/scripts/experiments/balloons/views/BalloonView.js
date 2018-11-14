@@ -3,15 +3,15 @@ define(["jquery", "underscore", "common/BaseClass",
     function ($, _, BaseClass) {
         return BaseClass.extend({
             init: function(){
-                this.balloonImg = "/resources/img/balloon.svg";
-                this.balloonCount = 1;
+                this.balloonImg = "/resources/img/balloon2.svg";
+                this.balloonCount = 99;
                 this.completedCount = 0;
                 this.celebrationTimeout = null;
                 this.balloonTimeouts = [];
                 this.animationTimeouts = [];
 
                 this.displayCelebrationIndex = 0;
-                this.displayCelebrations = [{type: "BIRTHDAY", targets:["Ian", "Bob", "Jane"]}];
+                this.displayCelebrations = [{type: "Anniversary", targets:["Dave &mdash; 2yrs"]}, {type: "BIRTHDAY", targets:["Ian", "Bob", "Jane"]}];
 
                 this.shim = $('<div class="celebration-shim"></div>');
                 $("html").append(this.shim);
@@ -25,23 +25,39 @@ define(["jquery", "underscore", "common/BaseClass",
                 }.bind(this));
 
                 this.shim.on("transitionend", function(e) {
-                    console.log("Shim transition complete");
-                    if(e.target.matches("div.celebratory-shim")){
-                        console.log(e.target);
-                        if (this.shim.hasClass("show")){
-                            console.log("Shim show");
-                            this.clearTimeouts();
-                        }else{
-                            console.log("Shim hide");
+                    var et = e.target;
+                    var $et = $(et);
+                    if(et.matches("div.celebration-shim")){
+                        if(!this.shim.hasClass("show")){
                             this.shim.removeClass("prep");
                             this.clearTimeouts();
+
+                            this.celebrationTimeout = setTimeout(function(){
+                                this.shim.addClass("prep");
+                                setTimeout(function(){
+                                    if(this.celebrationTimeout) {
+                                        this.celebrate(this.nextCelebration());
+                                    }
+                                }.bind(this), 100);
+                            }.bind(this), 2000);
+                        }
+                    }else if(et.matches("div.balloon")) {
+                        $et.remove();
+                        this.completedCount += 1;
+                        if (this.completedCount === this.balloonCount) {
+                            this.closeShim();
                         }
                     }
                 }.bind(this));
 
                 this.celebrationTimeout = setTimeout(function(){
-                    this.celebrate(this.nextCelebration());
-                }.bind(this), 0);
+                    this.shim.addClass("prep");
+                    setTimeout(function(){
+                        if(this.celebrationTimeout) {
+                            this.celebrate(this.nextCelebration());
+                        }
+                    }.bind(this), 100);
+                }.bind(this), 2000);
             },
 
             nextCelebration: function(){
@@ -53,12 +69,15 @@ define(["jquery", "underscore", "common/BaseClass",
 
             clearTimeouts: function(){
                 clearTimeout(this.celebrationTimeout);
+                this.celebrationTimeout = null;
                 _.each(this.balloonTimeouts, function(balloonTimeoutId){
                     clearTimeout(balloonTimeoutId);
                 });
                 _.each(this.animationTimeouts, function(animationTimeoutId){
                     clearTimeout(animationTimeoutId);
                 });
+                this.balloonTimeouts = [];
+                this.animationTimeouts = [];
             },
 
             resetShim: function(){
@@ -76,7 +95,6 @@ define(["jquery", "underscore", "common/BaseClass",
 
             floatBalloon: function(balloon){
                 return function(){
-                    //balloon.addClass("move");
                     balloon.css("top", (-1 * balloon.height()) + "px");
                 }
             },
@@ -87,17 +105,6 @@ define(["jquery", "underscore", "common/BaseClass",
                     var dimension = Math.floor((scaleFactor * 400) + 100);
 
                     var b = $('<div class="balloon"></div>');
-                    b.on("transitionend", function(e){
-                        $(e.target).remove();
-                        this.completedCount += 1;
-                        if(this.completedCount === this.balloonCount){
-                            this.closeShim();
-                            this.celebrationTimeout = setTimeout(function(){
-                                this.celebrate(this.nextCelebration());
-                            }.bind(this), 30000);
-                        }
-                    }.bind(this));
-
                     b.css("transition", "top " + speed + "s linear");
                     b.css("background-image", "url(" + this.balloonImg + "?id=" + randId + ")");
                     b.css("left", "" + left + "%");
@@ -118,15 +125,16 @@ define(["jquery", "underscore", "common/BaseClass",
                 var message = $('<div class="celebration-message"></div>');
                 var msg = "";
                 if(celebration.type === "BIRTHDAY"){
-                    msg += "Happy Birthday<br />";
+                    msg += "<strong>Happy Birthday</strong><br />To<br />";
+                }else{
+                    msg += "<strong>Happy Anniversary</strong><br />To<br />";
                 }
 
                 var sep = "";
                 _.each(celebration.targets, function(name){
                     msg += sep;
                     msg += name;
-                    msg += "<br />";
-                    sep = "&amp; ";
+                    sep = " &amp; ";
                 });
 
                 message.append(msg);
@@ -139,12 +147,12 @@ define(["jquery", "underscore", "common/BaseClass",
 
                 for(var i=0; i < this.balloonCount; i++){
                     var left =  Math.floor((Math.random() * 100));
-                    var delay = Math.floor((Math.random() * 25000) + 5000);
+                    var delay = Math.floor((Math.random() * 25000));
                     var hue = Math.floor((Math.random() * 10)) * 36;
                     var speed = Math.floor((Math.random() * 50) + 10);
                     var scaleFactor = Math.random();
 
-                    var t = setTimeout(this.createBalloon(randId, left, hue, speed, scaleFactor), 0);
+                    var t = setTimeout(this.createBalloon(randId, left, hue, speed, scaleFactor), delay);
                     this.balloonTimeouts.push(t);
                 }
             }
