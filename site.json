@@ -38,6 +38,14 @@
             {
                 "source": "pages/experiments/balloons.md",
                 "target": "experiments/balloons.html"
+            },
+            {
+                "source": "pages/experiments/alerts.md",
+                "target": "experiments/alerts.html"
+            },
+            {
+                "source": "pages/experiments/time-picker.md",
+                "target": "experiments/time-picker.html"
             }
         ],
         "templates": [

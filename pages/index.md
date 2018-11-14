@@ -10,6 +10,8 @@ homepage: true
 * [Starmap](/experiments/starmap.html) &mdash; Starmap
 * [Word Cloud](/experiments/word-cloud.html) &mdash; Word Cloud
 * [Layout](/experiments/layout.html) &mdash; Layout For Icons and Groups
+* [Alerts](/experiments/alerts.html) &mdash; Alert Styles
+* [Time Picker](/experiments/time-picker.html) &mdash; Time Picker
 * [Balloons](/experiments/balloons.html) &mdash; Balloons
 
 

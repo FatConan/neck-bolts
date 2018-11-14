@@ -49,4 +49,23 @@ header h1 {
     grid-row: 1;
     background: #555;
     box-sizing: border-box;
+    padding: 20px;
+}
+
+.description h1{
+    font-size: 30pt;
+    color: #fff;
+    margin: 10px 0 20px;
+}
+
+.description p {
+    color: #dedede;
+}
+
+.description a {
+    color: lightgreen;
+}
+
+a {
+    color: mediumseagreen;
 }
