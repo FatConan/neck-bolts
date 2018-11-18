@@ -103,6 +103,7 @@ define(["jquery", "underscore", "common/BaseClass",
                 return function(){
                     var zIndex = Math.floor(scaleFactor * 100);
                     var dimension = Math.floor((scaleFactor * 400) + 100);
+                    var brightness = Math.ceil((scaleFactor * 10)) * 10;
 
                     var b = $('<div class="balloon"></div>');
                     b.css("transition", "top " + speed + "s linear");
@@ -111,8 +112,8 @@ define(["jquery", "underscore", "common/BaseClass",
                     b.css("height", "" + dimension + "px");
                     b.css("width", "" + dimension + "px");
                     b.css("z-index", zIndex);
-                    b.css("-webkit-filter", "hue-rotate(" + hue + "deg) " + "brightness(" + (scaleFactor * 100) + "%)");
-                    b.css("filter",  "hue-rotate(" + hue + "deg) " + "brightness(" + (scaleFactor * 100) + "%)");
+                    b.css("-webkit-filter", "hue-rotate(" + hue + "deg) " + "brightness(" + brightness + "%)");
+                    b.css("filter",  "hue-rotate(" + hue + "deg) " + "brightness(" +  brightness + "%)");
 
                     this.shim.append(b);
                     this.animationTimeouts.push(setTimeout(this.floatBalloon(b), 100));
@@ -148,7 +149,7 @@ define(["jquery", "underscore", "common/BaseClass",
                 for(var i=0; i < this.balloonCount; i++){
                     var left =  Math.floor((Math.random() * 100));
                     var delay = Math.floor((Math.random() * 25000));
-                    var hue = Math.floor((Math.random() * 10)) * 36;
+                    var hue = Math.floor((Math.random() * 8)) * 45;
                     var speed = Math.floor((Math.random() * 50) + 10);
                     var scaleFactor = Math.random();
 
