@@ -1,8 +1,8 @@
-requirejs(["../../build"], function() {
+requirejs(["../../build"], function(){
     'use strict';
-    requirejs(["jquery", "domReady", "d3"], function ($, domReady, d3) {
+    requirejs(["jquery", "domReady", "d3"], function($, domReady, d3){
         domReady(function () {
-            var words = [{
+            let words = [{
                 "text": "parsley",
                 "weight": 0.07182309204488058,
                 "rating": 1.0769230769230769
@@ -254,27 +254,24 @@ requirejs(["../../build"], function() {
                 "text": "turnip",
                 "weight": 0.0021900416250528743,
                 "rating": 4.2
-            }].sort(function (a, b) {
+            }].sort(function(a, b){
                 return b.weight - a.weight;
             });
 
-            //CREATE USED TO GIVE THE SAME STRUCTURE AS A PORTAL DASHBOARD CHART
-            function create(options) {
-
-
-                //QuadTree used for boundinbox collisions
+            function create(options){
+                //QuadTree used for boundingbox collisions
                 function QuadTree(boundBox, lvl) {
-                    var maxObjects = 10;
+                    let maxObjects = 10;
                     this.bounds = boundBox || {
                         x: 0,
                         y: 0,
                         width: 0,
                         height: 0
                     };
-                    var objects = [];
+                    let objects = [];
                     this.nodes = [];
-                    var level = lvl || 0;
-                    var maxLevels = 5;
+                    let level = lvl || 0;
+                    let maxLevels = 5;
                     /*
                      * Clears the quadTree and all nodes of objects
                      */
@@ -319,38 +316,40 @@ requirejs(["../../build"], function() {
                      * excedes the capacity, it will split and add all
                      * objects to their corresponding nodes.
                      */
-                    this.insert = function (obj) {
-                        if (typeof obj === "undefined") {
+                    this.insert = function(obj){
+                        if(typeof obj === "undefined"){
                             return;
                         }
-                        if (obj instanceof Array) {
-                            for (var i = 0, len = obj.length; i < len; i++) {
+
+                        if(obj instanceof Array){
+                            for(let i = 0, len = obj.length; i < len; i++) {
                                 this.insert(obj[i]);
                             }
                             return;
                         }
+
                         if (this.nodes.length) {
-                            var index = this.getIndex(obj);
+                            let index = this.getIndex(obj);
                             // Only add the object to a subnode if it can fit completely
                             // within one
-                            if (index != -1) {
+                            if(index !== -1){
                                 this.nodes[index].insert(obj);
                                 return;
                             }
                         }
+
                         objects.push(obj);
                         // Prevent infinite splitting
-                        if (objects.length > maxObjects && level < maxLevels) {
-                            if (this.nodes[0] == null) {
+                        if(objects.length > maxObjects && level < maxLevels){
+                            if(this.nodes[0] == null){
                                 this.split();
                             }
-                            var i = 0;
-                            while (i < objects.length) {
-                                var index = this.getIndex(objects[i]);
-                                if (index != -1) {
+                            let i = 0;
+                            while(i < objects.length){
+                                let index = this.getIndex(objects[i]);
+                                if(index !== -1){
                                     this.nodes[index].insert((objects.splice(i, 1))[0]);
-                                }
-                                else {
+                                }else{
                                     i++;
                                 }
                             }
@@ -361,26 +360,25 @@ requirejs(["../../build"], function() {
                      * object cannot completely fit within a node and is part
                      * of the current node
                      */
-                    this.getIndex = function (obj) {
-                        var index = -1;
-                        var verticalMidpoint = this.bounds.x + this.bounds.width / 2;
-                        var horizontalMidpoint = this.bounds.y + this.bounds.height / 2;
+                    this.getIndex = function(obj){
+                        let index = -1;
+                        let verticalMidpoint = this.bounds.x + this.bounds.width / 2;
+                        let horizontalMidpoint = this.bounds.y + this.bounds.height / 2;
                         // Object can fit completely within the top quadrant
-                        var topQuadrant = (obj.y < horizontalMidpoint && obj.y + obj.height < horizontalMidpoint);
+                        let topQuadrant = (obj.y < horizontalMidpoint && obj.y + obj.height < horizontalMidpoint);
                         // Object can fit completely within the bottom quandrant
-                        var bottomQuadrant = (obj.y > horizontalMidpoint);
+                        let bottomQuadrant = (obj.y > horizontalMidpoint);
                         // Object can fit completely within the left quadrants
-                        if (obj.x < verticalMidpoint &&
-                            obj.x + obj.width < verticalMidpoint) {
-                            if (topQuadrant) {
+                        if(obj.x < verticalMidpoint &&
+                            obj.x + obj.width < verticalMidpoint){
+                            if(topQuadrant){
                                 index = 1;
-                            }
-                            else if (bottomQuadrant) {
+                            }else if (bottomQuadrant) {
                                 index = 2;
                             }
-                        }
-                        // Object can fix completely within the right quandrants
-                        else if (obj.x > verticalMidpoint) {
+                        }else if(obj.x > verticalMidpoint){
+                            // Object can fix completely within the right quandrants
+
                             if (topQuadrant) {
                                 index = 0;
                             }
@@ -424,7 +422,7 @@ requirejs(["../../build"], function() {
                     };
                 }
 
-                var chart = {
+                let chart = {
                     height: 400,
                     width: 800,
                     arrowWidth: 6,
@@ -447,21 +445,22 @@ requirejs(["../../build"], function() {
                     },
 
                     resetCanvas: function (canvas) {
-                        if (typeof document !== "undefined") {
+                        if(typeof document !== "undefined"){
                             this.spriteCanvas = document.createElement("canvas");
                             this.spriteCanvas.width = 1;
                             this.spriteCanvas.height = 1;
                             this.ratio = Math.sqrt(this.spriteCanvas.getContext("2d").getImageData(0, 0, 1, 1).data.length >> 2);
                             this.spriteCanvas.width = (this.cw << 5) / this.ratio;
                             this.spriteCanvas.height = this.ch / this.ratio;
-                        } else {
+                        }else{
                             // Attempt to use node-canvas.
                             this.spriteCanvas = new Canvas(this.cw << 5, this.ch);
                         }
-                        this.spriteContext = this.spriteCanvas.getContext("2d"),
 
-                            //The actual canvas where we'll draw our stuff
-                            this.canvas = d3.select(canvas);
+                        this.spriteContext = this.spriteCanvas.getContext("2d");
+
+                        //The actual canvas where we'll draw our stuff
+                        this.canvas = d3.select(canvas);
                         this.canvas.html("");
 
                         this.paddingTop = options.paddingTop !== undefined ? options.paddingTop : this.paddingTop;
@@ -471,8 +470,8 @@ requirejs(["../../build"], function() {
 
                         this.scale = options.scale !== undefined ? options.scale : this.scale;
 
-                        var canvasWidth = this.width * this.scale;
-                        var canvasHeight = this.height * this.scale;
+                        let canvasWidth = this.width * this.scale;
+                        let canvasHeight = this.height * this.scale;
                         this.height = (this.height - (this.paddingTop + this.paddingBottom)) * this.scale;
                         this.width = (this.width - (this.paddingLeft + this.paddingRight)) * this.scale;
 
@@ -484,25 +483,26 @@ requirejs(["../../build"], function() {
                     },
 
                     colorWord: function (rating) {
-                        var colors = ['#d35454', '#f48d71', '#f9c55d', '#d6cf56', '#92bc61'];
-                        var i = Math.max(Math.min(Math.floor(rating), colors.length - 1), 0);
+                        let colors = ['#d35454', '#f48d71', '#f9c55d', '#d6cf56', '#92bc61'];
+                        let i = Math.max(Math.min(Math.floor(rating), colors.length - 1), 0);
                         return colors[i];
                     },
 
                     createTextNode: function (container, word, i, total) {
-                        var x_base = this.width / 5; //position to the right based on rating (min 1, max 5)
-                        var y_base = this.height / 5; //position vertically based on size
+                        let x_base = this.width / 5; //position to the right based on rating (min 1, max 5)
+                        let y_base = this.height / 5; //position vertically based on size
 
-                        if (this.current.currentWeight !== word.weight)
+                        if(this.current.currentWeight !== word.weight){
                             this.current = {
                                 currentSizeI: i,
                                 currentWeight: word.weight
-                            }
+                            };
+                        }
 
-                        var ratio = Math.sqrt(Math.sqrt(((this.current.currentSizeI + 1) / total)));
-                        var size = (16 + (90 - (90 * ratio))) * this.scale;
-                        var rotate = 1;
-                        var textNode = {
+                        let ratio = Math.sqrt(Math.sqrt(((this.current.currentSizeI + 1) / total)));
+                        let size = (16 + (90 - (90 * ratio))) * this.scale;
+                        let rotate = 1;
+                        let textNode = {
                             'id': i,
                             'size': size,
                             'rotate': rotate,
@@ -511,17 +511,17 @@ requirejs(["../../build"], function() {
                             'collidableWith': 'word',
                             'type': 'word',
                             'direction': 1
-                        }
+                        };
 
                         //I'm loathe to use it, but here the ~~ will return 0 in the case where .rating is undefined
-                        var xStart = x_base * Math.max(~~word.rating, 0);
-                        var xOffset = x_base * Math.random();
-                        var x = Math.max(0, Math.min(xStart + xOffset, this.width - textNode.size));
+                        let xStart = x_base * Math.max(~~word.rating, 0);
+                        let xOffset = x_base * Math.random();
+                        let x = Math.max(0, Math.min(xStart + xOffset, this.width - textNode.size));
 
-                        var yStart = y_base * Math.max(Math.floor(5 * i / total), 0);
-                        var yOffset = y_base * Math.random();
+                        let yStart = y_base * Math.max(Math.floor(5 * i / total), 0);
+                        let yOffset = y_base * Math.random();
 
-                        var y = Math.max(0, Math.min(yStart + yOffset, this.height - textNode.size));
+                        let y = Math.max(0, Math.min(yStart + yOffset, this.height - textNode.size));
                         y = Math.random() * this.height;
                         textNode.x = x;
                         textNode.originalX = x;
@@ -532,7 +532,7 @@ requirejs(["../../build"], function() {
                     },
 
                     drawLine: function (container, lineCoords) {
-                        var pointerLine = d3.line()
+                        let pointerLine = d3.line()
                             .x(function (d) {
                                 return d.x
                             })
@@ -551,27 +551,27 @@ requirejs(["../../build"], function() {
                     },
 
                     drawGuideLines: function () {
-                        for (var i = 0; i < 6; i++) {
-                            var container = this.svg.append("svg:g");
-                            var y = (this.height / 5) * i;
+                        for (let i = 0; i < 6; i++) {
+                            let container = this.svg.append("svg:g");
+                            let y = (this.height / 5) * i;
                             this.drawLine(container, [{x: 0, y: y}, {x: this.width, y: y}]);
                         }
-                        for (var i = 0; i < 16; i++) {
-                            var container = this.svg.append("svg:g");
-                            var x = (this.width / 15) * i;
+                        for (let i = 0; i < 16; i++) {
+                            let container = this.svg.append("svg:g");
+                            let x = (this.width / 15) * i;
                             this.drawLine(container, [{x: x, y: 0}, {x: x, y: this.height}]);
                         }
 
-                        var container = this.svg.append("svg:g");
-                        var texts = [
+                        let container = this.svg.append("svg:g");
+                        let texts = [
                             {text: 'NEGATIVE', anchor: 'start', x: 0},
                             {text: 'NEUTRAL', anchor: 'middle', x: this.width / 2},
                             {text: 'POSITIVE', anchor: 'end', x: this.width}
                         ];
 
-                        for (var i = 0; i < texts.length; i++) {
-                            var text = texts[i];
-                            var y = -10;
+                        for(let i = 0; i < texts.length; i++) {
+                            let text = texts[i];
+                            let y = -10;
                             container.append("text")
                                 .text(text.text)
                                 .attr("fill", "#ababab")
@@ -581,10 +581,10 @@ requirejs(["../../build"], function() {
                                 .attr("transform", "translate(" + text.x + "," + y + ")");
                         }
 
-                        for (var i = 0; i < 5; i++) {
-                            var y = this.height + 25;
-                            var x = ((this.width / 5) * i + 1) + this.width / 10;
-                            var text = i + 1 + (i + 1 > 1 ? " STARS" : " STAR");
+                        for(let i = 0; i < 5; i++){
+                            let y = this.height + 25;
+                            let x = ((this.width / 5) * i + 1) + this.width / 10;
+                            let text = i + 1 + (i + 1 > 1 ? " STARS" : " STAR");
 
                             container.append("text")
                                 .text(text)
@@ -596,25 +596,24 @@ requirejs(["../../build"], function() {
                         }
                     },
 
-                    drawTexts: function (container, nodes) {
-                        for (var i = 0; i < nodes.length; i++) {
+                    drawTexts: function (container, nodes){
+                        for(let i = 0; i < nodes.length; i++){
                             this.drawText(container, nodes[i]);
                         }
                     },
 
-                    drawText: function (container, node) {
-                        var draw_x = node.x;
-                        var draw_y = node.y + this.paddingTop;
-                        var draw_rotate = node.rotate;
+                    drawText: function(container, node){
+                        let draw_x = node.x;
+                        let draw_y = node.y + this.paddingTop;
 
-                        var clicked = function () {
-                            d3.selectAll("circle").style("fill", function (circle) {
+                        let clicked = function(){
+                            d3.selectAll("circle").style("fill", function(){
                                 return d3.select(this).attr("data-fill");
                             });
                             d3.select(this).style("fill", "#000000");
-                        }
+                        };
 
-                        var c = container.append("circle")
+                        container.append("circle")
                             .attr("cx", draw_x)
                             .attr("cy", draw_y)
                             .attr("r", node.size)
@@ -627,18 +626,18 @@ requirejs(["../../build"], function() {
                     draw: function (words, progressive) {
                         this.drawGuideLines();
                         //return;
-                        var container = this.svg.append("svg:g").attr("class", "word-cloud");
-                        var nodes = []
+                        let container = this.svg.append("svg:g").attr("class", "word-cloud");
+                        let nodes = [];
                         this.current = {
                             currentSizeI: -1,
                             currentWeight: -1
                         };
 
-                        var i = 0;
-                        var f = function (container, i, nodes, words) {
-                            return function () {
-                                if (i < words.length) {
-                                    var node = this.createTextNode(container, words[i], i, words.length);
+                        let i = 0;
+                        let f = function(container, i, nodes, words){
+                            return function(){
+                                if(i < words.length){
+                                    let node = this.createTextNode(container, words[i], i, words.length);
                                     this.drawText(container, node);
                                     setTimeout(f(container, ++i, nodes, words), 0);
                                 }
@@ -648,14 +647,14 @@ requirejs(["../../build"], function() {
                     },
 
                     detectCollision: function () {
-                        var objects = [];
+                        let objects = [];
                         this.quadTree.getAllObjects(objects);
 
-                        for (var x = 0, len = objects.length; x < len; x++) {
-                            var obj = [];
+                        for(let x = 0, len = objects.length; x < len; x++){
+                            let obj = [];
                             this.quadTree.findObjects(obj, objects[x]);
 
-                            for (var y = 0, length = obj.length; y < length; y++) {
+                            for(let y = 0, length = obj.length; y < length; y++){
                                 // DETECT COLLISION ALGORITHM
                                 if (objects[x].id !== obj[y].id &&
                                     objects[x].collidableWith === obj[y].type &&
@@ -663,7 +662,7 @@ requirejs(["../../build"], function() {
                                     (objects[x].x < obj[y].x + obj[y].width &&
                                         objects[x].x + objects[x].width > obj[y].x &&
                                         objects[x].y < obj[y].y + obj[y].height &&
-                                        objects[x].y + objects[x].height > obj[y].y)) {
+                                        objects[x].y + objects[x].height > obj[y].y)){
                                     objects[x].isColliding = true;
                                     obj[y].isColliding = true;
                                 }
@@ -673,14 +672,14 @@ requirejs(["../../build"], function() {
 
                     addRefresher: function (target) {
                         $(target).append("<button class=\"refresh\">R</button>");
-                        var btn = $(target).find("button.refresh");
-                        btn.css("position", "absolute").css("bottom", "0").css("right", 0).on("click", function () {
+                        let btn = $(target).find("button.refresh");
+                        btn.css("position", "absolute").css("bottom", "0").css("right", 0).on("click", function(){
                             this.write(target)
                         }.bind(this));
                     },
 
-                    react: function (value) {
-                        if (options.general.valueReaction) {
+                    react: function(value){
+                        if(options.general.valueReaction){
                             return options.general.valueReaction(this, parent, value);
                         }
                         return value;
@@ -698,7 +697,7 @@ requirejs(["../../build"], function() {
                 return chart;
             }
 
-            var options = {
+            let options = {
                 height: 400,
                 width: 900,
                 paddingTop: 40,
@@ -708,7 +707,7 @@ requirejs(["../../build"], function() {
                 scale: 1
             };
 
-            var chart = create(options);
+            let chart = create(options);
             chart.dataProvider = words;
             chart.write('#word');
         });
