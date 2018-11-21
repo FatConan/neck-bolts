@@ -584,7 +584,6 @@ requirejs(["../../build"], function(){
             let width = canvas.width();
             let height =  (4/9) * width;
 
-            console.log(canvas, width, height);
             let options = {
                 height: height,
                 width: width,
