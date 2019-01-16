@@ -13,5 +13,6 @@ homepage: true
 * [Alerts](/experiments/alerts.html) &mdash; Alert Styles
 * [Time Picker](/experiments/time-picker.html) &mdash; Time Picker
 * [Balloons](/experiments/balloons.html) &mdash; Balloons
+* [Percentage Rings](/experiments/rings.html) &mdash; Rings
 
 

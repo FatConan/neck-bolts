@@ -1,0 +1,12 @@
+{% extends "experiment.html" %}
+{% block head %}
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/overcast/jquery-ui.css" />
+        <script type="text/javascript" data-main="/resources/scripts/experiments/rings/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+{% endblock %}
+{% block demo %}
+    <div>
+        <p>A chart showing the percentage of contracted hours worked by an employee in the past 3 months and past 3 years. Hours worked up to 100% of the contracted hours
+            indicated by pale grey arc, hours worked beyond 100% indicated by pastel coloured arc.</p>
+        <div id="canvas" data-data='{"months":[{"alloted":140,"worked":280},{"alloted":140,"worked":120},{"alloted":140,"worked":167}],"years":[{"alloted":1680,"worked":1900},{"alloted":1680,"worked":1080}, {"alloted":1680,"worked":1730}]}'></div>
+    </div>
+{% endblock %}

@@ -46,6 +46,10 @@
             {
                 "source": "pages/experiments/time-picker.md",
                 "target": "experiments/time-picker.html"
+            },
+            {
+                "source": "pages/experiments/rings.md",
+                "target": "experiments/rings.html"
             }
         ],
         "templates": [
