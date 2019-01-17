@@ -1,0 +1,166 @@
+{% extends "experiment.html" %}
+{% block head %}
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/overcast/jquery-ui.css" />
+    <script type="text/javascript" data-main="/resources/scripts/experiments/label-printer/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <style type="text/css" media="screen,print">
+        @import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow');
+        body{
+            font-family: 'PT Sans Narrow', sans-serif;
+        }
+        .label{
+            box-sizing: border-box;
+            border: 1px solid rgba(0,0,0,0.5);
+            background: rgba(255,255,255,0.5);
+            padding: 0;
+            width: 57mm;
+            height: 32mm;
+            position: relative;
+            font-size: 10pt;
+            text-align: left;
+        }
+        .label.margins_10{
+            padding: 10mm;
+        }
+        .label.margins_20{
+            padding: 20mm;
+        }
+        .label.margins_5{
+            padding: 5mm;
+        }
+         .label.margins_2{
+            padding: 2mm;
+        }
+        .label.margins_0{
+            padding: 0;
+        }
+        .label.sized_57_19{
+            width: 57mm;
+            height: 19mm;
+        }
+        .label.sized_57_32{
+            width: 57mm;
+            height: 32mm;
+        }
+        .label.sized_36_89{
+            width: 36mm;
+            height: 89mm;
+        }
+        .label.sized_101_54{
+            width: 101mm;
+            height: 54mm;
+        }
+        .label.sized_104_159{
+            width: 104mm;
+            height: 159mm;
+        }
+        .label.font_10{font-size: 10pt;}
+        .label.font_12{font-size: 12pt;}
+        .label.font_14{font-size: 14pt;}
+        .label.font_16{font-size: 16pt;}
+        .label.font_18{font-size: 18pt;}
+        .label.text_left{text-align: left;}
+        .label.text_right{text-align: right;}
+        .label.text_center{text-align: center;}
+        .label.text_justify{text-align: justify;}
+    </style>
+    <style type="text/css" media="screen">
+        .input{
+            display: inline-block;
+            margin-right: 20px;
+        }
+        .label-ruler{
+            background: #fff url(/resources/img/square.png) top left repeat;
+            background-size: 1cm 1cm;
+            width: 20cm;
+            height: 20cm;
+            margin-top: 20px;
+        }
+        .label textarea{
+            display: table-cell;
+            width: 100%;
+            height: inherit;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+        }
+    </style>
+    <style type="text/css" media="print">
+        header,
+        footer,
+        section.description,
+        a.back {
+            display: none;
+        }
+        body{
+            display: block;
+            padding: 0;
+            margin: 0;
+            width: auto;
+        }
+        .label-controls{
+            display: none;
+        }
+        section.demonstrations,
+        section.demo,
+        .label-ruler{
+            background: none;
+            padding: 0;
+            margin: 0;
+            width: auto;
+            height: auto;
+        }
+        .label{
+            border: none;
+        }
+    </style>
+{% endblock %}
+{% block demo %}
+    <div class="label-controls" id="label-controls">
+        <div class="input">
+            <label for="label_size">Size:</label>
+            <select name="label_size" id="label_size">
+                <option value="sized_57_32">57mm x 32mm</option>
+                <option value="sized_57_19">57mm x 19mm</option>
+                <option value="sized_36_89">36mm x 89mm</option>
+                <option value="sized_101_54">101mm x 54mm</option>
+                <option value="sized_104_159">104mm x159mm</option>
+            </select>
+        </div>
+        <div class="input">
+            <label for="margins">Margins:</label>
+            <select name="margins" id="margins">
+                <option value="margins_0">No margins</option>
+                <option value="margins_2">2mm</option>
+                <option value="margins_5">5mm</option>
+                <option value="margins_10">10mm</option>
+                <option value="margins_20">20mm</option>
+
+            </select>
+        </div>
+        <div class="input">
+            <label for="font-size">Font Size:</label>
+            <select name="font-size" id="font-size">
+                <option value="font_10">10 pt</option>
+                <option value="font_12">12 pt</option>
+                <option value="font_14">14 pt</option>
+                <option value="font_16">16 pt</option>
+                <option value="font_18">18 pt</option>
+            </select>
+        </div>
+        <div class="input">
+            <label for="text-align">Text Align:</label>
+            <select name="text-align" id="text-align">
+                <option value="text_left">Left</option>
+                <option value="text_right">Right</option>
+                <option value="text_center">Center</option>
+                <option value="text_justify">Justify</option>
+            </select>
+        </div>
+    </div>
+    <div class="label-ruler" id="label-ruler">
+        <div class="label" id="label">
+
+        </div>
+    </div>
+{% endblock %}

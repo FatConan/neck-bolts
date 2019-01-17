@@ -14,5 +14,5 @@ homepage: true
 * [Time Picker](/experiments/time-picker.html) &mdash; Time Picker
 * [Balloons](/experiments/balloons.html) &mdash; Balloons
 * [Percentage Rings](/experiments/rings.html) &mdash; Rings
-
+* [DYMO Label Maker](/experiments/label-printer.html) &mdash; Label Printer
 

@@ -84,8 +84,6 @@ define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, 
             var decorWidth = 0;
             var pct = 100.0;
 
-            console.log(data);
-
             _.each(data.months, function(e, i){
                 pct = (e.worked * 100)/e.alloted;
                 rad = outerRad - (i * 25);
@@ -112,7 +110,6 @@ define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, 
             .style("font-size", "15pt")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(90, 90)");
-
         }
     });
 });

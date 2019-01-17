@@ -50,6 +50,10 @@
             {
                 "source": "pages/experiments/rings.md",
                 "target": "experiments/rings.html"
+            },
+            {
+                "source": "pages/experiments/label-printer.md",
+                "target": "experiments/label-printer.html"
             }
         ],
         "templates": [
