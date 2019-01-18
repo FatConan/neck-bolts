@@ -54,6 +54,10 @@
             {
                 "source": "pages/experiments/label-printer.md",
                 "target": "experiments/label-printer.html"
+            },
+            {
+                "source": "pages/experiments/magazine-text.md",
+                "target": "experiments/magazine-text.html"
             }
         ],
         "templates": [

@@ -15,4 +15,5 @@ homepage: true
 * [Balloons](/experiments/balloons.html) &mdash; Balloons
 * [Percentage Rings](/experiments/rings.html) &mdash; Rings
 * [DYMO Label Maker](/experiments/label-printer.html) &mdash; Label Printer
+* [Magazine Text](/experiments/magazine-text.html) &mdash; Magazine Text
 
