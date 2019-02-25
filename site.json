@@ -8,56 +8,8 @@
                 "target": "index.html"
             },
             {
-                "source": "pages/experiments/arcs.md",
-                "target": "experiments/arcs.html"
-            },
-            {
-                "source": "pages/experiments/dials.md",
-                "target": "experiments/dials.html"
-            },
-            {
-                "source": "pages/experiments/percentage-loader.md",
-                "target": "experiments/percentage-loader.html"
-            },
-            {
-                "source": "pages/experiments/slide-out-link.md",
-                "target": "experiments/slide-out-link.html"
-            },
-            {
-                "source": "pages/experiments/starmap.md",
-                "target": "experiments/starmap.html"
-            },
-            {
-                "source": "pages/experiments/word-cloud.md",
-                "target": "experiments/word-cloud.html"
-            },
-            {
-                "source": "pages/experiments/layout.md",
-                "target": "experiments/layout.html"
-            },
-            {
-                "source": "pages/experiments/balloons.md",
-                "target": "experiments/balloons.html"
-            },
-            {
-                "source": "pages/experiments/alerts.md",
-                "target": "experiments/alerts.html"
-            },
-            {
-                "source": "pages/experiments/time-picker.md",
-                "target": "experiments/time-picker.html"
-            },
-            {
-                "source": "pages/experiments/rings.md",
-                "target": "experiments/rings.html"
-            },
-            {
-                "source": "pages/experiments/label-printer.md",
-                "target": "experiments/label-printer.html"
-            },
-            {
-                "source": "pages/experiments/magazine-text.md",
-                "target": "experiments/magazine-text.html"
+                "source": "pages/experiments/*.md",
+                "target": "experiments/*.html"
             }
         ],
         "templates": [
