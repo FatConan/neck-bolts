@@ -1,19 +1,10 @@
 define(["jquery", "underscore"], function ($, _){
-    return {
-        extend: function(extendingClass){
-            var extended = _.extend({}, this);
-            _.extend(extended, extendingClass);
-            return function(options){
-                return extended.instantiate(options);
-            };
-        },
-
-        init: function(options){
-            //Override this method in subclasses
-        },
+    return class BaseClass {
+        constructor(){
+        }
 
         //Generic GUID generator method
-        guid: function() {
+        guid(){
             function s4() {
                 return Math.floor((1 + Math.random()) * 0x10000)
                     .toString(16)
@@ -21,21 +12,21 @@ define(["jquery", "underscore"], function ($, _){
             }
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                 s4() + '-' + s4() + s4() + s4();
-        },
+        }
 
-        findParentTag: function(element, tagName){
+        findParentTag(element, tagName){
             while(element && element.tagName !== tagName && element.tagName !== null){
                 element = element.parentNode;
             }
             return element;
-        },
+        }
 
-        getQueryVariable: function(variable){
-            var query = window.location.search.substring(1);
-            var vars = query.split("&");
-            var returnArray = [];
-            for (var i=0;i<vars.length;i++) {
-                var pair = vars[i].split("=");
+        getQueryVariable(variable){
+            let query = window.location.search.substring(1);
+            let vars = query.split("&");
+            let returnArray = [];
+            for(let i=0; i<vars.length; i++) {
+                let pair = vars[i].split("=");
                 if(pair[0] === variable){
                     returnArray.push(decodeURIComponent(pair[1]));
                 }
@@ -47,29 +38,18 @@ define(["jquery", "underscore"], function ($, _){
             }else{
                 return returnArray;
             }
-        },
+        }
 
-        initialize: function(options){
-            _.extend(this, options);
-            this.init(options);
-            return this;
-        },
-
-        instantiate: function(options){
-            var instance = _.extend({}, this);
-            return instance.initialize(options);
-        },
-
-        swap: function(items, firstIndex, secondIndex){
-            var temp = items[firstIndex];
+        swap(items, firstIndex, secondIndex){
+            let temp = items[firstIndex];
             items[firstIndex] = items[secondIndex];
             items[secondIndex] = temp;
-        },
+        }
 
-        partition: function(items, itemKey, left, right){
-            var pivot = items[Math.floor((right + left) / 2)][itemKey];
-            var i = left;
-            var j = right;
+        partition(items, itemKey, left, right){
+            let pivot = items[Math.floor((right + left) / 2)][itemKey];
+            let i = left;
+            let j = right;
 
             while(i <= j){
                 while(items[i][itemKey] < pivot){
@@ -87,10 +67,10 @@ define(["jquery", "underscore"], function ($, _){
                 }
             }
             return i;
-        },
+        }
 
-        quickSort: function(items, itemKey, left, right){
-            var index;
+        quickSort(items, itemKey, left, right){
+            let index;
             if(items.length > 1){
                 left = typeof left !== "number" ? 0 : left;
                 right = typeof right !== "number" ? items.length-1 : right;
@@ -102,7 +82,6 @@ define(["jquery", "underscore"], function ($, _){
                     this.quickSort(items, itemKey, index, right);
                 }
             }
-
             return items;
         }
     };

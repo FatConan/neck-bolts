@@ -74,10 +74,10 @@ define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, 
                     var offsetB = Math.floor((height-next)/2);
 
                     var points = [
-                        {x: Math.floor(i*funnelWidth), y: offsetA, label: "" + d.v + "% - " + d.l},
-                        {x: Math.floor(i*funnelWidth), y: height-offsetA, label: "" + d.v + "% - " + d.l},
-                        {x: Math.floor((i+1) * funnelWidth), y: height-offsetB, label: "" + d.v + "% - " + d.l},
-                        {x: Math.floor((i+1) * funnelWidth), y: offsetB, label: "" + d.v + "% - " + d.l}
+                        {x: Math.floor(i*funnelWidth), y: offsetA, label: "🡆 " + d.v + "% - " + d.l},
+                        {x: Math.floor(i*funnelWidth), y: height-offsetA, label: "🡆 " + d.v + "% - " + d.l},
+                        {x: Math.floor((i+1) * funnelWidth), y: height-offsetB, label: "🡆 " + d.v + "% - " + d.l},
+                        {x: Math.floor((i+1) * funnelWidth), y: offsetB, label: "🡆 " + d.v + "% - " + d.l}
                     ];
                     trapezoidArrays.push(points);
                 }
@@ -96,6 +96,7 @@ define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, 
                   .style("stroke", this.lineColor);
 
                 this.svg.append("g").data(points).append("text")
+                    .style("font-size", "13pt")
                     .style("fill", "#000")
                     .style("stroke", "#000")
                     .attr("x", function(d){
