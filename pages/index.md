@@ -17,4 +17,5 @@ homepage: true
 * [DYMO Label Maker](/experiments/label-printer.html) &mdash; Label Printer
 * [Magazine Text](/experiments/magazine-text.html) &mdash; Magazine Text
 * [Funnel](/experiments/funnel.html) &mdash; Funnel
+* [Clock](/experiments/clock.html) &mdash; Clock
 

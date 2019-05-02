@@ -1,0 +1,20 @@
+{% extends "experiment.html" %}
+{% block head %}
+<style type="text/css">
+    .clock-canvas{
+        background: paleturquoise;
+        margin: 20px;
+        font-size: 30pt;
+    }
+    .clock-canvas .date,
+    .clock-canvas .time {
+        padding: 20px;
+        display: inline-block;
+    }
+
+</style>
+<script type="text/javascript" data-main="/resources/scripts/experiments/clock/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+{% endblock %}
+{% block demo %}
+<div class="canvas clock-canvas" id="clock"></div>
+{% endblock %}
