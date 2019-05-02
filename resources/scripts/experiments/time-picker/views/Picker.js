@@ -1,8 +1,9 @@
 define(["jquery", "underscore", "common/BaseClass",
         "jquery-ui"],
-    function ($, _, BaseClass) {
-        return BaseClass.extend({
-            init: function(){
+    function ($, _, BaseClass){
+        return class Picker extends BaseClass{
+            constructor(){
+                super();
                 this.target = $("section.picker");
 
                 this.selecting = false;
@@ -10,11 +11,11 @@ define(["jquery", "underscore", "common/BaseClass",
                 this.end = null;
 
                 this.addListeners();
-            },
+            }
 
-            highlightRange: function(start, end, className){
-                var started = false;
-                var done = false;
+            highlightRange(start, end, className){
+                let started = false;
+                let done = false;
                 _.each(this.target[0].children, function(d){
                     if(!done){
                         if(d === start && d === end){
@@ -33,13 +34,11 @@ define(["jquery", "underscore", "common/BaseClass",
                         }
                     }
                 }.bind(this));
-            },
+            }
 
-            addListeners: function(){
+            addListeners(){
                 this.target.on("mousedown", function(e){
-                    console.log("mousedown");
-                    console.log(e.target);
-                    var el = e.target;
+                    let el = e.target;
                     while (el && el.matches && !el.matches("div.division")) {
                         el = el.parentNode;
                     }
@@ -51,7 +50,7 @@ define(["jquery", "underscore", "common/BaseClass",
 
                 this.target.on("mouseover", function(e){
                     if(this.selecting){
-                        var el = e.target;
+                        let el = e.target;
                         while (el && el.matches && !el.matches("div.division")) {
                             el = el.parentNode;
                         }
@@ -62,10 +61,8 @@ define(["jquery", "underscore", "common/BaseClass",
                 }.bind(this));
 
                 this.target.on("mouseup", function(e){
-                    console.log("mouseup");
-                    console.log(e.target);
                     if(this.selecting){
-                        var el = e.target;
+                        let el = e.target;
                         while (el && el.matches && !el.matches("div.division")) {
                             el = el.parentNode;
                         }
@@ -78,6 +75,6 @@ define(["jquery", "underscore", "common/BaseClass",
                     this.selecting = false;
                 }.bind(this));
             }
-        });
+        };
     }
 );

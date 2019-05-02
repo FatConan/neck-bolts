@@ -1,6 +1,6 @@
 requirejs(["../../build"], function(){
     'use strict';
-    requirejs(["jquery", "domReady", "d3", "experiments/layout/views/LayoutView"], function ($, domReady, d3, LayoutView) {
+    requirejs(["jquery", "domReady", "experiments/layout/views/LayoutView"], function ($, domReady, LayoutView) {
         domReady(function(){
             new LayoutView();
         });

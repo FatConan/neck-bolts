@@ -1,9 +1,9 @@
 define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, BaseClass){
-    return BaseClass.extend({
-        canvas: null,
-        svg: null,
-
-        init: function(options){
+    return class Funnel extends BaseClass{
+        constructor(options){
+            super();
+            this.canvas = null;
+            this.svg = null;
             this.height = options && options.height ? options.height : 300;
             this.lineColor = options && options.lineColor ? options.lineColor : "#fff";
             this.sectionColors = options && options.sectionColors ? options.sectionColors: [
@@ -13,19 +13,19 @@ define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, 
                 "#ccddff",
                 "#cceeff",
                 "#ccffff"].reverse();
-        },
+        }
 
-        resetCanvas: function(canvas){
+        resetCanvas(canvas){
             this.canvas = d3.select(canvas);
             this.canvas.html("");
             this.canvasWidth = $(canvas).width();
             this.svg = this.canvas.append("svg")
-            .attr("width", this.canvasWidth)
-            .attr("height", this.height);
-        },
+                .attr("width", this.canvasWidth)
+                .attr("height", this.height);
+        }
 
-        drawSections: function(data, opts){
-            var mode = opts && opts.mode ? opts.mode : "absolute";
+        drawSections(data, opts){
+            let mode = opts && opts.mode ? opts.mode : "absolute";
             switch(mode){
                 case "relative":
                     data.push({v: 100, l: ""});
@@ -33,16 +33,16 @@ define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, 
 
                 case "absolute":
                 default:
-                    var d = data[data.length-1];
+                    let d = data[data.length-1];
                     data.push({v: d.v, l:""});
                     break;
             }
 
-            var backstops = [];
-            var funnelWidth = this.canvasWidth/(data.length-1);
-            var height = this.height;
-            var previousHeight;
-            var h;
+            let backstops = [];
+            let funnelWidth = this.canvasWidth/(data.length-1);
+            let height = this.height;
+            let previousHeight;
+            let h;
 
             _.each(data, function(d){
                 switch(mode){
@@ -63,17 +63,15 @@ define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, 
                 }
             });
 
-            console.log(backstops);
-
-             var trapezoidArrays = [];
+            let trapezoidArrays = [];
             _.each(backstops, function(current, i){
                 if(backstops[i+1]){
-                    var d = data[i];
-                    var next = backstops[i+1];
-                    var offsetA = Math.floor((height-current)/2);
-                    var offsetB = Math.floor((height-next)/2);
+                    let d = data[i];
+                    let next = backstops[i+1];
+                    let offsetA = Math.floor((height-current)/2);
+                    let offsetB = Math.floor((height-next)/2);
 
-                    var points = [
+                    let points = [
                         {x: Math.floor(i*funnelWidth), y: offsetA, label: "🡆 " + d.v + "% - " + d.l},
                         {x: Math.floor(i*funnelWidth), y: height-offsetA, label: "🡆 " + d.v + "% - " + d.l},
                         {x: Math.floor((i+1) * funnelWidth), y: height-offsetB, label: "🡆 " + d.v + "% - " + d.l},
@@ -82,18 +80,17 @@ define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, 
                     trapezoidArrays.push(points);
                 }
             });
-            var line = d3.line().x(function(d){
+            let line = d3.line().x(function(d){
                 return d.x;
             }).y(function (d){
                 return d.y;
             });
 
-            var blah = function(points, index){
-                console.log(points);
-                var trap = this.svg.append('path')
-                  .attr("d", line(points) + 'Z')
-                  .style("fill", this.sectionColors[index % this.sectionColors.length])
-                  .style("stroke", this.lineColor);
+            let blah = function(points, index){
+                let trap = this.svg.append('path')
+                    .attr("d", line(points) + 'Z')
+                    .style("fill", this.sectionColors[index % this.sectionColors.length])
+                    .style("stroke", this.lineColor);
 
                 this.svg.append("g").data(points).append("text")
                     .style("font-size", "13pt")
@@ -114,11 +111,11 @@ define(["jquery", "underscore", "d3", "common/BaseClass",], function ($, _, d3, 
             _.each(trapezoidArrays, function(points, index){
                 blah(points, index);
             });
-        },
+        }
 
-        render: function(canvas, data, opts){
+        render(canvas, data, opts){
             this.resetCanvas(canvas);
             this.drawSections(data, opts);
         }
-    });
+    };
 });

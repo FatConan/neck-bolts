@@ -1,85 +1,15 @@
 requirejs(["../../build"], function(){
     'use strict';
-    requirejs(["jquery", "domReady", "d3"], function ($, domReady, d3) {
-        domReady(function () {
-            var progressIndicator = ({
-                radius: 100,
-                canvas: null,
-                svg: null,
-
-                create: function () {
-                    return this;
-                },
-
-                resetCanvas: function (canvas) {
-                    this.canvas = d3.select(canvas);
-                    this.canvas.html("");
-                    this.svg = this.canvas.append("svg")
-                        .attr("width", this.radius * 2)
-                        .attr("height", this.radius * 2)
-                        .append("g")
-                        .attr("transform", "translate(" + this.radius + "," + this.radius + ")");
-                },
-
-                draw: function (percentage) {
-                    var radsPerPercent = (Math.PI * 2) / 100;
-
-                    var textColor = "#169BD5";
-                    if (percentage === 0) {
-                        textColor = "#D0D0D0";
-                    }
-
-                    var backgroundColor = "#D0D0D0";
-                    var arcColor = "#169BD5";
-
-                    //Draw the background arc
-                    var outerArc = d3.arc()
-                        .innerRadius(this.radius - 20)
-                        .outerRadius(this.radius - 15)
-                        .startAngle(0)
-                        .endAngle(2 * Math.PI);
-
-                    this.svg.append("path")
-                        .attr("fill", backgroundColor)
-                        .attr("d", outerArc);
-
-                    //Draw the foreground arc (showing the percentage complete)
-                    var arc = d3.arc()
-                        .innerRadius(this.radius - 20)
-                        .outerRadius(this.radius - 15)
-                        .startAngle(0)
-                        .endAngle(radsPerPercent * percentage.toFixed(0));
-
-                    this.svg.append("path")
-                        .attr("fill", arcColor)
-                        .attr("d", arc);
-
-                    var fontSize = Math.max((this.radius / 8));
-                    if (fontSize > 10) {
-                        this.svg.append("text")
-                            .text(percentage.toFixed(0) + "%")
-                            .attr("fill", textColor)
-                            .style("font-size", fontSize + "pt")
-                            .attr("text-anchor", "middle")
-                            .attr("transform", "translate(" + -2 + "," + fontSize / 2 + ")");
-                    }
-                },
-
-                render: function (canvas, percentageToDisplay, radius) {
-                    this.radius = radius;
-                    this.resetCanvas(canvas);
-
-                    this.draw(percentageToDisplay);
-                }
-            }).create();
-
-            var progressLoader = function(){
+    requirejs(["jquery", "domReady", "experiments/percentage-loader/views/PercentageLoader"], function ($, domReady, PercentageLoader) {
+        domReady(function(){
+            const progressIndicator = new PercentageLoader();
+            let progressLoader = function(){
                 console.log("Loader");
-                var tick = function(i){
+                let tick = function(i){
                     progressIndicator.render("div.canvas", i, 150);
                 };
-                var i = 0;
-                var wrapped = function(){
+                let i = 0;
+                let wrapped = function(){
                     tick(i);
                     i += 1;
                     if(i <= 100){

@@ -2,9 +2,10 @@ define(["jquery", "underscore", "common/BaseClass",
         "text!experiments/layout/templates/GroupTemplate.html",
         "text!experiments/layout/templates/LinkTemplate.html",
         "jquery-ui"],
-    function ($, _, BaseClass, GroupTemplateHTML, LinkTemplateHTML) {
-        return BaseClass.extend({
-            init: function(){
+    function ($, _, BaseClass, GroupTemplateHTML, LinkTemplateHTML){
+        return class LayoutView extends BaseClass{
+            constructor(){
+                super();
                 this.layout = $("#layout");
                 this.controls = $("#controls");
                 this.groupElement = $("#edit-group");
@@ -15,9 +16,8 @@ define(["jquery", "underscore", "common/BaseClass",
                     modal: true,
                     buttons: {
                         "Save": function(){
-                            var title = this.groupElement.find("input[name=title]").val();
-                            var data = {id: this.guid(), title: title};
-                            console.log(data);
+                            let title = this.groupElement.find("input[name=title]").val();
+                            let data = {id: this.guid(), title: title};
                             this.addGroup(data);
                         }.bind(this),
 
@@ -45,11 +45,11 @@ define(["jquery", "underscore", "common/BaseClass",
                 this.linkTemplate = _.template(LinkTemplateHTML);
 
                 this.addListeners();
-            },
+            }
 
-            addListeners: function(){
+            addListeners(){
                 this.controls.on("click", function(e){
-                    var a = this.findParentTag(e.target, "A");
+                    let a = this.findParentTag(e.target, "A");
                     if(a && a.matches("a.add-group")){
                         e.preventDefault();
                         this.openGroup();
@@ -57,8 +57,8 @@ define(["jquery", "underscore", "common/BaseClass",
                 }.bind(this));
 
                 this.layout.on("click", function(e){
-                    var a = this.findParentTag(e.target, "A");
-                    var group = this.findParentTag(e.target, "FIELDSET");
+                    let a = this.findParentTag(e.target, "A");
+                    let group = this.findParentTag(e.target, "FIELDSET");
                     if(a && a.matches("a.add-icon")) {
                         e.preventDefault();
                         this.openLink($(group).find("div.icons"));
@@ -72,66 +72,66 @@ define(["jquery", "underscore", "common/BaseClass",
                         this.deleteLink(a, $(group).find("div.icons"));
                     }
                 }.bind(this));
-            },
+            }
 
-            addGroup: function(data){
-                var count = this.layout.find("fieldset.group").length;
-                var css = "";
-                for(var i=0; i<count+1; i++){
+            addGroup(data){
+                let count = this.layout.find("fieldset.group").length;
+                let css = "";
+                for(let i=0; i<count+1; i++){
                     css += " auto";
                 }
-                var t = this.groupTemplate(data);
+                let t = this.groupTemplate(data);
                 this.layout.css("grid-template-columns", css);
                 this.layout.append(t);
                 this.closeGroup();
-            },
+            }
 
-            deleteGroup: function(group){
-                var count = this.layout.find("fieldset.group").length;
-                var css = "";
-                for(var i=0; i<count-1; i++){
+            deleteGroup(group){
+                let count = this.layout.find("fieldset.group").length;
+                let css = "";
+                for(let i=0; i<count-1; i++){
                     css += " auto";
                 }
                 $(group).remove();
                 this.layout.css("grid-template-columns", css);
-            },
+            }
 
-            openGroup: function(){
+            openGroup(){
                 this.groupModal.dialog("open");
-            },
+            }
 
-            closeGroup: function(){
+            closeGroup(){
                 this.groupModal.dialog("close");
-            },
+            }
 
-            addLink: function(data, group){
-                var count = group.find("a").length;
-                var css = "";
-                for(var i=0; i<count+1; i++){
+            addLink(data, group){
+                let count = group.find("a").length;
+                let css = "";
+                for(let i=0; i<count+1; i++){
                     css += " 100px";
                 }
-                var t = $(this.linkTemplate(data));
+                let t = $(this.linkTemplate(data));
                 group.css("grid-template-columns", css);
                 group.prepend(t);
                 this.closeLink();
-            },
+            }
 
-            deleteLink: function(link, group){
-                var count = group.find("a").length;
-                var css = "";
-                for(var i=0; i<count-1; i++){
+            deleteLink(link, group){
+                let count = group.find("a").length;
+                let css = "";
+                for(let i=0; i<count-1; i++){
                     css += " 100px";
                 }
                 $(link).remove();
                 group.css("grid-template-columns", css);
-            },
+            }
 
-            openLink: function(group){
-                var options = {
+            openLink(group){
+                let options = {
                     buttons: {
                         "Save": function(){
-                            var title = this.linkElement.find("input[name=title]").val();
-                            var data = {id: this.guid(), title: title};
+                            let title = this.linkElement.find("input[name=title]").val();
+                            let data = {id: this.guid(), title: title};
                             this.addLink(data, group);
                         }.bind(this),
                         "Cancel": function () {
@@ -141,11 +141,11 @@ define(["jquery", "underscore", "common/BaseClass",
                 };
                 this.linkModal.dialog("option", options);
                 this.linkModal.dialog("open");
-            },
+            }
 
-            closeLink: function(){
+            closeLink(){
                 this.linkModal.dialog("close");
             }
-        });
+        };
     }
 );
