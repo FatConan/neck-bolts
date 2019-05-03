@@ -1,10 +1,17 @@
 {% extends "base.html" %}
+{% block extensionPoints %}
+    <script src="/resources/scripts/common/ViewScript.js"></script>
+{% endblock %}
 {% block body %}
     <section class="demo">
+        <a href="#" class="see-code">See Code</a>
         {% block demo %}{% endblock %}
     </section>
     <section class="description">
         {{ content|safe }}
     </section>
     <a class="back" href="/">Back</a>
+    <div class="modal">
+        <pre class="see-code"></pre>
+    </div>
 {% endblock %}
