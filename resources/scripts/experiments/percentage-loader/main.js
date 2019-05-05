@@ -1,6 +1,6 @@
 requirejs(["../../build"], function(){
     'use strict';
-    requirejs(["jquery", "domReady", "experiments/percentage-loader/views/PercentageLoader"], function ($, domReady, PercentageLoader) {
+    requirejs(["jquery", "domReady", "experiments/percentage-loader/views/PercentageLoader", "common/ViewScript"], function ($, domReady, PercentageLoader) {
         domReady(function(){
             const progressIndicator = new PercentageLoader();
             let progressLoader = function(){

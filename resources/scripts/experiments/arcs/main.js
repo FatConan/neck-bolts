@@ -1,6 +1,6 @@
 requirejs(["../../build"], function(){
     'use strict';
-    requirejs(["jquery", "domReady", "experiments/arcs/views/Arcs"], function ($, domReady, Arcs){
+    requirejs(["jquery", "domReady", "experiments/arcs/views/Arcs", "common/ViewScript"], function ($, domReady, Arcs){
         domReady(function(){
             let options = {
                 arcRadius: 45,
@@ -18,7 +18,6 @@ requirejs(["../../build"], function(){
             let charts = [];
 
             for(let i=0; i < els.length; i++){
-                console.log("Creating for " + els[i]);
                 let chart = new Arcs(options);
                 let a = Math.random() * 100;
                 let b = Math.random() * 100;

@@ -1,17 +1,13 @@
 {% extends "base.html" %}
 {% block extensionPoints %}
-    <script src="/resources/scripts/common/ViewScript.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/black-tie/jquery-ui.css" />
 {% endblock %}
 {% block body %}
     <section class="demo">
-        <a href="#" class="see-code">See Code</a>
         {% block demo %}{% endblock %}
     </section>
     <section class="description">
         {{ content|safe }}
     </section>
     <a class="back" href="/">Back</a>
-    <div class="modal">
-        <pre class="see-code"></pre>
-    </div>
 {% endblock %}

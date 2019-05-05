@@ -69,3 +69,21 @@ header h1 {
 a {
     color: mediumseagreen;
 }
+
+a.see-code{
+    background: url(/resources/img/source.svg) center right no-repeat;
+    background-size: 32px 32px;
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+    overflow: hidden;
+    text-indent: -9999px;
+    font-size: 0;
+    float: right;
+}
+
+pre.see-code{
+    padding: 20px;
+    font-family: "Courier New", monospace;
+    font-size: 10pt;
+}

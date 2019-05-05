@@ -1,6 +1,6 @@
 requirejs(["../../build"], function(){
     'use strict';
-    requirejs(["jquery", "domReady", "experiments/dials/views/Dials"], function ($, domReady, Dials){
+    requirejs(["jquery", "domReady", "experiments/dials/views/Dials", "common/ViewScript"], function ($, domReady, Dials){
         domReady(function(){
             let options = {
                 arcRadius: 45,
