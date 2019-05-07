@@ -33,6 +33,11 @@
                 "source": "resources/img",
                 "target": "resources/img",
                 "resource_type": "relocate"
+            },
+            {
+                "source": "resources/video",
+                "target": "resources/video",
+                "resource_type": "relocate"
             }
         ]
     }

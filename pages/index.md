@@ -18,4 +18,5 @@ homepage: true
 * [Magazine Text](/experiments/magazine-text.html) &mdash; Magazine Text
 * [Funnel](/experiments/funnel.html) &mdash; Funnel
 * [Clock](/experiments/clock.html) &mdash; Clock
+* [Video](/experiments/hls-test.html) &mdash; Streaming Video 
 

@@ -1,0 +1,42 @@
+{% extends "experiment.html" %}
+{% block head %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.5.4/alt/video-js-cdn.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/silvermine-videojs-quality-selector@1.1.2/dist/css/quality-selector.css" rel="stylesheet">
+
+    <script type="text/javascript" data-main="/resources/scripts/experiments/hls-test/main.js" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <style type="text/css">
+        .videos{
+            display: grid;
+            grid-gap: 20px;
+            grid-template-columns: 600px 1fr;
+        }
+        .video{
+            grid-column: 1;
+        }
+        .browser{
+            grid-column: 2;
+            grid-row-start: 1;
+            grid-row-end: 3;
+        }
+        .browser a{
+            display: block;
+            padding: 10px;
+        }
+    </style>
+{% endblock %}
+{% block demo %}
+    <div class="videos">
+        <div class="video">
+            <video id="video-live" class="video-js vjs-default-skin" width="600" height="400" controls preload="auto">
+               <source src="https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8" type="application/x-mpegURL">
+            </video>
+        </div>
+
+        <div id="video" class="video"></div>
+
+        <div id="browser" class="browser">
+            <a href="#bunny" data-sources="bunny">Big Buck Bunny</a>
+            <a href="#sports" data-sources="sports">Sports</a>
+        </div>
+    </div>
+{% endblock %}
